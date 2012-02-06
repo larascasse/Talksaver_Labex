@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="http://code.jquery.com/jquery-1.5.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js"></script>
+  
+    <script src="http://www.google.com/jsapi"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.js"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.yahooboss.js"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.youtube.js"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.vimeo.js"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.soundcloud.js"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.image.js"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.footnote.js"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.twitter.js"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.subtitle.js"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.attribution.js"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.flickr.js"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.webpage.js"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.wikipedia.js"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.googlemap.js"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.webpage.js"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.googlefeed.js"></script>
+    <script src="../popcorn-maker/lib/popcorn/popcorn.capture.js"></script>
+    
+    <script src="../popcorn-maker/butter/src/previewer/butter.previewer.js"></script>
+  <style>
+    video, div {
+      float: left;
+      display: inline;
+    }
+
+    .content-div {
+      width: 300px;
+      height: 200px;
+      border: 1px solid #000;
+    }
+
+    #main {
+      min-width: 300px;
+      min-height: 200px;
+    }
+  </style><script>
+  var popcorn;
+document.addEventListener('DOMContentLoaded',function(e){
+popcorn = Popcorn( '#butter-media-element-Media0');
+popcorn.footnote({
+start:'10.56351464248285',
+end:'34.11429440382051',
+text:'Bonjour tout le monde',
+target:'patrick_bouchain'});
+/*popcorn.yahooboss({
+start:'15.427888927924926',
+end:'43.97866868926258',
+target:'pierre_giner',
+query:'architecture bouchain',
+searchtype:'images,web,news'});*/
+
+popcorn.play();
+
+/*
+var $pop = Popcorn("#butter-media-element-Media0"),
+image = document.createElement("image");
+
+image.id = "capture";
+image.style.marginLeft = "10px";
+
+$pop.listen("canplayall", function() {
+
+	this.media.parentNode.appendChild( image );
+
+	this.exec( 10, function() {
+
+		this.currentTime( 10 ).capture({
+
+			target: "img#capture",
+			media: true
+
+		}).currentTime( 0 ).play();
+
+	}).currentTime( 0 ).play();
+
+});*/
+
+
+},false);</script>
+
+    <script type="text/javascript" >
+	var currentEventId;
+	var popcorn2;
+    function createSearchEvent(str) {
+        alert(popcorn.currentTime());
+        if(currentEventId)
+        	popcorn.getTrackEvent(currentEventId).end = popcorn.currentTime();
+        popcorn.yahooboss({
+    		start:popcorn.currentTime()+0000001,
+    		end:popcorn.currentTime()+1000000,
+    		target:'pierre_giner',
+    		query:str,
+    		searchtype:'images,web,news'});
+    	currentEventId = popcorn.getLastTrackEventId();
+    	alert(currentEventId)
+    }
+
+        
+    
+    //var e
+    window.addEventListener("DOMContentLoaded", function(){
+
+    	//popcorn2 = Popcorn( '#butter-media-element-Media0');
+    	//createSearchEvent("toto");
+
+    	$("#inputbutton").click(function() {
+        	alert($("#inputsearch").val());
+    		createSearchEvent($("#inputsearch").val());
+    	});
+    	//alert($("#inputbutton"))
+
+    	
+    	/*popcorn2.footnote({
+    	start:'0',
+    	end:'50',
+    	text:'Bonjour tout le monde',
+    	target:'patrick_bouchain'});
+    	alert(popcorn2.getLastTrackEventId());
+    	
+    	popcorn2 = Popcorn( '#butter-media-element-Media0');
+    	popcorn2=popcorn2.yahooboss({
+    		start:'15.427888927924926',
+    		end:'43.97866868926258',
+    		target:'pierre_giner',
+    		query:'architecture bouchain',
+    		searchtype:'images,web,news'});
+    	
+    	alert(popcorn2.getLastTrackEventId());
+    	popcorn2.getTrackEvent(popcorn2.getLastTrackEventId()).start = 0;
+
+
+    	
+    	alert(e.getTrackEvent(e.getLastTrackEventId()));
+
+    	$("iputbutton").click(function() {
+
+    	});
+    	/*
+    	
+        alert(Popcorn( '#butter-media-element-Media0').getTrackEvents);
+
+        alert(popcorn2.footnote({
+        	start:'0',
+        	end:'34.11429440382051',
+        	text:'Bonjour tout le mondeXXXXXXXXXXXX',
+        	target:'patrick_bouchain'}))
+        
+        //Popcorn.addTrackEvent(Popcorn( '#butter-media-element-Media0'),popcorn2);
+        	 alert(Popcorn( '#butter-media-element-Media0').getTrackEvents);
+        	alert(popcorn)
+        Popcorn.addTrackEvent( popcorn, {
+            start: 0,
+            end: 25,
+            text:'AAAAAAAAAAAAAA',
+            target:'patrick_bouchain',
+            type:"footnote",
+            _running: false,
+            options:{text:'AAAAAAAAAAAAAA', target:'patrick_bouchain'},
+            _natives: {type:"footnote",options:{text:'AAAAAAAAAAAAAA',target:'patrick_bouchain'}}
+          });
+        
+        alert(Popcorn.instances[0].data.history);
+       alert(Popcorn.p.footnote(start));
+       /*Popcorn.p.footnote().forEach(function( method ) {
+            alert(method)
+        	alert(Popcorn.p.footnote()[ method ] );
+          });*/
+        
+ 
+    }, false);
+
+    </script>
+    </head>
+  <body>
+    
+    <div class="content-div" data-butter="target" id="pierre_giner"></div>
+    <div class="content-div" data-butter="target" id="patrick_bouchain"></div>
+    
+    <div class="content-div" data-butter="target" id="patrick_bouchain"><input type="text"/ id="inputsearch"><input type="button" value="ok" id="inputbutton"></input></div>
+  
+
+<div id="main" data-butter="media"><video controls="" id="butter-media-element-Media0" autobuffer="true" preload="auto"><source src="videos/17NOVOdileNouvelVO.webm"></video></div></body>
+</html>
+<!-- 
+{"template":"labex","title":"Test 1","guid":"05571AD9-B1E5-4324-93DC-C3CADD73AD75","project":{"targets":[{"id":0,"name":"pierre_giner"},{"id":1,"name":"patrick_bouchain"}],"media":[{"id":"Media0","name":"Media01328091334465","url":"http://localhost:3000/videos/17NOVOdileNouvelVO.webm","target":"main","duration":421.2909851074219,"tracks":[{"name":"Track1328091341780","id":"Track0","trackEvents":[{"id":"TrackEvent0","type":"yahooboss","popcornOptions":{"start":15.427888927924926,"end":43.97866868926258,"query":"architecture bouchain","searchtype":"","target":"pierre_giner"},"track":"Track1328091341780","name":"Track1328091341788"}]},{"name":"Track1328091439716","id":"Track1","trackEvents":[{"id":"TrackEvent1","type":"footnote","popcornOptions":{"start":10.56351464248285,"end":34.11429440382051,"target":"patrick_bouchain","text":"Bonjour ˆ tous"},"track":"Track1328091439716","name":"Track1328091439724"}]}]}]},"timeStamp":1328091522131} -->

@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+<base
+	href="http://mozillapopcorn.org/maker/./layouts/labex/template.html">
+<script src="../../lib/popcorn/popcorn.js"></script>
+<script src="../../lib/popcorn/popcorn.youtube.js"></script>
+<script src="../../lib/popcorn/popcorn.vimeo.js"></script>
+<script src="../../lib/popcorn/popcorn.soundcloud.js"></script>
+<script src="../../lib/popcorn/popcorn.image.js"></script>
+<script src="../../lib/popcorn/popcorn.footnote.js"></script>
+<script src="../../lib/popcorn/popcorn.twitter.js"></script>
+<script src="../../lib/popcorn/popcorn.subtitle.js"></script>
+<script src="../../lib/popcorn/popcorn.attribution.js"></script>
+<script src="../../lib/popcorn/popcorn.flickr.js"></script>
+<script src="../../lib/popcorn/popcorn.webpage.js"></script>
+<script src="../../lib/popcorn/popcorn.wikipedia.js"></script>
+<script src="../../lib/popcorn/popcorn.googlemap.js"></script>
+<!--  <script src="../../butter/src/previewer/butter.previewer.js"></script> -->
+<style>
+video,div {
+	float: left;
+	display: inline;
+}
+
+.content-div {
+	width: 200px;
+	height: 200px;
+	border: 1px solid #000;
+}
+
+#main {
+	min-width: 300px;
+	min-height: 200px;
+}
+</style>
+<script>
+	document.addEventListener('DOMContentLoaded', function(e) {
+		var popcorn = Popcorn('#butter-media-element-Media0');
+		popcorn.flickr( {
+			start : '0',
+			end : '61.490202954534944',
+			userid : '',
+			tags : 'giner, bleu',
+			username : '',
+			apikey : '',
+			target : 'sample-div-1',
+			height : '',
+			width : '',
+			padding : '',
+			border : '',
+			numberofimages : '600'
+		});
+		popcorn.text( {
+			start : '32.822473198704465',
+			end : '53.59619041307438',
+			text : 'Hello !!!',
+			target : 'sample-div-2'
+		});
+		popcorn.twitter( {
+			start : '306.80088180453447',
+			end : '327.1727863068276',
+			src : 'undefined',
+			target : 'twitter-container',
+			height : 'undefined',
+			width : 'undefined'
+		});
+
+	}, false);
+</script>
+</head>
+<body>
+
+<div class="content-div" data-butter="target" id="sample-div-1"></div>
+<div class="content-div" data-butter="target" id="sample-div-2"></div>
+<div class="content-div" data-butter="target" id="sample-div-3"></div>
+
+
+<div id="main" data-butter="media"><video controls=""
+	id="butter-media-element-Media0" autobuffer="true" preload="auto"><source
+	src="http://localhost:3000/videos/17NOVOdileNouvelVO.webm"></video></div>
+</body>
+</html>
+
+<!-- 
+{"template":"labex","title":"labex","guid":"B2C3D65D-5790-4D96-AE08-48224E8023C6","project":{"targets":[{"id":0,"name":"sample-div-1"},{"id":1,"name":"sample-div-2"},{"id":2,"name":"sample-div-3"}],"media":[{"id":"Media0","name":"Media01327580608636","url":"http://localhost:3000/videos/17NOVOdileNouvelVO.webm","target":"main","duration":421.2909851074219,"tracks":[{"name":"Track1327580627564","id":"Track0","trackEvents":[{"id":"TrackEvent0","type":"flickr","popcornOptions":{"start":0,"end":61.490202954534944,"userid":"","tags":"giner, bleu","username":"","apikey":"","height":"","width":"","padding":"","border":"","numberofimages":"600","target":"sample-div-1"},"track":"Track1327580627564","name":"Track1327580627575"}]},{"name":"Track1327580724330","id":"Track1","trackEvents":[{"id":"TrackEvent1","type":"text","popcornOptions":{"start":32.822473198704465,"end":53.59619041307438,"text":"Hello !!!","target":"sample-div-2"},"track":"Track1327580724330","name":"Track1327580724340"},{"id":"TrackEvent2","type":"twitter","popcornOptions":{"start":306.80088180453447,"end":327.1727863068276},"track":"Track1327580724330","name":"Track1327580817232"}]}]}]},"timeStamp":1327580910765}
+
+-->
