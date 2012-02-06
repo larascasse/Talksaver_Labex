@@ -1,0 +1,9 @@
+[submodule "popcorn-maker"]
+	path = popcorn-maker
+	url = git@github.com:larascasse/popcorn-maker.git
+[submodule "Pantaloons"]
+	path = Pantaloons
+	url = git@github.com:larascasse/Pantaloons.git
+[submodule "site/lib/popcorn"]
+	path = site/lib/popcorn
+	url = git@github.com:larascasse/popcorn-js.git
