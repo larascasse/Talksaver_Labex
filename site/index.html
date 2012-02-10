@@ -2,6 +2,7 @@
 <html>
 <head>
 <script src="http://code.jquery.com/jquery-1.5.js"></script>
+<script src="lib/external/jquery.json-2.3.min.js"></script>
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js"></script>
 
@@ -68,17 +69,16 @@ video,div {
 
 						socket = io.connect('http://ec2-79-125-59-26.eu-west-1.compute.amazonaws.com');
 						socket.on('connect', function(data) {
-							console.log(data);
+							console.log("connected");
 							//socket.emit('my other event', { my: 'data' });
 							});
 
 						socket.on(
 										'addEvent',
 										function(data) {
-											console.log("addEvent" + data);
-											if (currentEventId != data.event.id) {
-												createSearchEvent(popcorn
-														.getTrackEvent(currentEventId).options.query);
+											console.log("recieve" + data.query);
+											if (currentEventId != data.id) {
+												createSearchEvent(data.query);
 											}
 										});
 
@@ -100,14 +100,12 @@ video,div {
 			searchtype : 'images,web,news'
 		});
 		currentEventId = popcorn.getLastTrackEventId();
-		alert("NEW EVENT " + currentEventId + " "
-				+ popcorn.getTrackEvent(currentEventId))
+		console.log("NEW EVENT " + currentEventId + " "
+				+ popcorn.getTrackEvent(currentEventId).query)
 	}
 	function createSearchEventAndDispatch(str) {
 		createSearchEvent(str);
-		socket.emit('addEvent', {
-			event : popcorn.getTrackEvent(currentEventId)
-		});
+		socket.emit('addEvent', {query:popcorn.getTrackEvent(currentEventId).query,id:currentEventId});
 	}
 
 	//var e
@@ -117,7 +115,7 @@ video,div {
 			//createSearchEvent("toto");
 
 			$("#inputbutton").click(function() {
-				alert($("#inputsearch").val());
+				console.log($("#inputsearch").val());
 				createSearchEventAndDispatch($("#inputsearch").val());
 			});
 			//alert($("#inputbutton"))

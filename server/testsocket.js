@@ -14,7 +14,7 @@ io.sockets.on('connection', function (socket) {
   });
   socket.on('addEvent', function (data) {
 	    console.log(data);
-	    socket.emit('addEvent', data);
+	    socket.broadcast.emit('addEvent', data);
 
   });
 });
