@@ -1,0 +1,11 @@
+<script src="http://ec2-79-125-59-26.eu-west-1.compute.amazonaws.com:3000/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost');
+  socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+</script>
+
+
+index2.html
