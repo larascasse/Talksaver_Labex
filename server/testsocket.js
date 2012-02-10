@@ -8,7 +8,7 @@ app.get('/', function (req, res) {
 });
 
 io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
+  socket.emit('connect', { hello: 'world' });
   socket.on('my other event', function (data) {
     console.log(data);
   });
