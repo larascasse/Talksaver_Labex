@@ -24,6 +24,7 @@
     <script src="../popcorn-maker/lib/popcorn/popcorn.capture.js"></script>
     
     <script src="../popcorn-maker/butter/src/previewer/butter.previewer.js"></script>
+    <script src="http://ec2-79-125-59-26.eu-west-1.compute.amazonaws.com:80/socket.io/socket.io.js"></script>
   <style>
     video, div {
       float: left;
@@ -58,30 +59,18 @@ searchtype:'images,web,news'});*/
 
 popcorn.play();
 
-/*
-var $pop = Popcorn("#butter-media-element-Media0"),
-image = document.createElement("image");
+var socket = io.connect('http://ec2-79-125-59-26.eu-west-1.compute.amazonaws.com');
+socket.on('connect', function (data) {
+  console.log(data);
+  //socket.emit('my other event', { my: 'data' });
+});
 
-image.id = "capture";
-image.style.marginLeft = "10px";
-
-$pop.listen("canplayall", function() {
-
-	this.media.parentNode.appendChild( image );
-
-	this.exec( 10, function() {
-
-		this.currentTime( 10 ).capture({
-
-			target: "img#capture",
-			media: true
-
-		}).currentTime( 0 ).play();
-
-	}).currentTime( 0 ).play();
-
-});*/
-
+socket.on('addEvent', function (data) {
+	  console.log(data);
+	  if(currentEventId!=data.event.id) {
+		  createSearchEvent(popcorn.getTrackEvent(currentEventId).options.query);
+	  }
+});
 
 },false);</script>
 
@@ -99,7 +88,11 @@ $pop.listen("canplayall", function() {
     		query:str,
     		searchtype:'images,web,news'});
     	currentEventId = popcorn.getLastTrackEventId();
-    	alert(currentEventId)
+    	alert(currentEventId+" "+popcorn.getTrackEvent(currentEventId).options.query)
+    }
+    function createSearchEventAndDispatch(str) {
+        createSearchEvent(str);
+    	socket.emit('addEvent', { event: popcorn.getTrackEvent(currentEventId) });
     }
 
         
@@ -112,7 +105,7 @@ $pop.listen("canplayall", function() {
 
     	$("#inputbutton").click(function() {
         	alert($("#inputsearch").val());
-    		createSearchEvent($("#inputsearch").val());
+        	createSearchEventAndDispatch($("#inputsearch").val());
     	});
     	//alert($("#inputbutton"))
 
