@@ -1,0 +1,34 @@
+@charset "UTF-8";
+
+div{
+	display:block;
+}
+
+#main{
+	width:100%;
+	height:100%;
+	overflow:hidden;
+}
+
+#image-container, #text-container{
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;	
+	height:100%;
+	overflow:hidden;
+}
+#image-container {
+	z-index:-2;	
+}
+#text-container {
+	z-index:-1;	
+}
+#image-container div{
+	position:absolute;
+	overflow:hidden;
+}
+
+#text-container div{
+	position:absolute;
+}
