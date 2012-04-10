@@ -2,127 +2,40 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <link rel="stylesheet" type="text/css" href="_css/style.css" />
 <link rel="stylesheet" type="text/css" href="_css/main.css" />
 
 
+<!--  JQUERY  -->
 <script src="http://code.jquery.com/jquery-1.5.js"></script>
 <script src="lib/external/jquery.json-2.3.min.js"></script>
-<script
-	src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js"></script>
-
-<script src="http://www.google.com/jsapi"></script>
-<script src="../popcorn-maker/lib/popcorn/popcorn.js"></script>
-<script src="_js/popcorn.labex.js"></script>
-<script src="../popcorn-maker/lib/popcorn/popcorn.footnote.js"></script>
->
-
-<script
-	src="http://ec2-79-125-59-26.eu-west-1.compute.amazonaws.com:80/socket.io/socket.io.js"></script>
-	
+<script	src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js"></script>
 <script src="lib/external/modernizr-2.0.6.min.js"></script>
 <script type="text/javascript" src="lib/external/jquery.transit.min.js"></script>
+
+
+
+<!--  POPCORN  -->
+<script src="../butter/external/popcorn-js/popcorn.js"></script>
+<script src="http://www.google.com/jsapi"></script>
+<script src="../butter/external/popcorn-js/plugins/footnote/popcorn.footnote.js"></script>
+
+
+
+<!--  SOCKET  -->
+<script	src="http://ec2-79-125-59-26.eu-west-1.compute.amazonaws.com:80/socket.io/socket.io.js"></script>
+
+<!--  LABEX  -->	
+<script src="_js/popcorn/popcorn.labex.js"></script>
 <!-- gestion des Žcrans/calques -->
 <script type="text/javascript" src="_js/nosign.view.js"></script>
 <!-- lanceur -->
 <script type="text/javascript" src="_js/main.js"></script>
 
 
-
-<style>
-video,div {
-	float: left;
-	display: inline;
-}
-
-.content-div {
-	width: 300px;
-	height: 200px;
-	/*border: 1px solid #000;*/
-}
-
-#main {
-	min-width: 300px;
-	min-height: 200px;
-}
-</style>
-<script>
-	var popcorn;
-	var socket;
-	Popcorn(
-			function() {
-				console.log("ready");
-				popcorn = Popcorn('#butter-media-element-Media0');
-				popcorn.footnote( {
-					start : '10.56351464248285',
-					end : '34.11429440382051',
-					text : 'Bonjour tout le monde',
-					target : 'patrick_bouchain'
-				});
-				/*popcorn.yahooboss({
-				 start:'15.427888927924926',
-				 end:'43.97866868926258',
-				 target:'pierre_giner',
-				 query:'architecture bouchain',
-				 searchtype:'images,web,news'});*/
-
-				popcorn.play();
-
-				socket = io
-						.connect('http://ec2-79-125-59-26.eu-west-1.compute.amazonaws.com');
-				socket.on('connect', function(data) {
-					console.log("connected");
-				});
-
-				socket.on('addEvent', function(data) {
-					console.log("recieve" + data.query);
-					if (currentEventId != data.id) {
-						createSearchEvent(data.query);
-					}
-				});
-
-			}, false);
-</script>
-
-<script type="text/javascript">
-	var currentEventId;
-	var popcorn2;
-	function createSearchEvent(str) {
-		//alert(popcorn.currentTime());
-		if (currentEventId)
-			popcorn.getTrackEvent(currentEventId).end = popcorn.currentTime();
-		popcorn.yahooboss( {
-			start : popcorn.currentTime() + 0000001,
-			end : popcorn.currentTime() + 1000000,
-			target : 'pierre_giner',
-			query : str,
-			searchtype : 'images,web,news'
-		});
-		currentEventId = popcorn.getLastTrackEventId();
-		console.log("NEW EVENT " + currentEventId + " "
-				+ popcorn.getTrackEvent(currentEventId).query)
-	}
-	function createSearchEventAndDispatch(str) {
-		createSearchEvent(str);
-		socket.emit('addEvent', {
-			query : popcorn.getTrackEvent(currentEventId).query,
-			id : currentEventId
-		});
-	}
-
-	//var e
-	window.addEventListener("DOMContentLoaded", function() {
-		$("#inputbutton").click(function() {
-			console.log($("#inputsearch").val());
-			createSearchEventAndDispatch($("#inputsearch").val());
-		});
-
-	}, false);
-</script>
 </head>
 <body>
-<div id="image-container"></div>
-<div id="text-container"></div>
 	
 <div class="content-div" data-butter="target" id="pierre_giner"></div>
 <div class="content-div" data-butter="target" id="patrick_bouchain"></div>
@@ -136,7 +49,7 @@ video,div {
 <div id="main" data-butter="media">
 	<video controls="" id="butter-media-element-Media0" autobuffer="true" preload="auto">
 	<source src="videos/17NOVOdileNouvelVO.webm" />
-	</video>
+</video>
 </div>
 </body>
 </html>

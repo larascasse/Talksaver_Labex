@@ -98,7 +98,9 @@ function buildMemory(){
 		
 		init : function( options ) {
 			
-			return this.each(function(){				
+			return this.each(function(){		
+				
+				
 					
 				var winW = jQuery(window).width();
 				var winH = jQuery(window).height();

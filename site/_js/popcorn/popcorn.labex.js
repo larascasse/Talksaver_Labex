@@ -60,6 +60,11 @@
 	        html = html.replace('{thumbnailwidth}',item.thumbnailwidth);
 	        html = html.replace('{thumbnailheight}',item.thumbnailheight);
 	        html = html.replace('{title}',item.title);
+	        /*
+	         * html = html.replace('{thumbnail}',item.url);
+	        html = html.replace('{thumbnailwidth}',item.width);
+	        html = html.replace('{thumbnailheight}',item.height);
+	         */
 	        databack.imagesHTML += html;
 	      }
 	      databack.imagesHTML += '</ul>';
@@ -102,6 +107,7 @@
         	htmlString+=databack.newsHTML; 
         }
        _queries[ o.query.name.toLowerCase() ].htmlString = htmlString;
+      // console.log(_queries[ o.query.name.toLowerCase() ].started+" "+htmlString)
         if(_queries[ o.query.name.toLowerCase() ].started) {
         	startContainer(_queries[ o.query.name.toLowerCase() ].container,o.query.name.toLowerCase())
         }
@@ -110,17 +116,30 @@
     		    webItemHTML:'<li><a href="{clickurl}">{title}</a><p>{abstract}</p></li>',
     		    newsItemHTML:'<li lang="{language}"><a href="{clickurl}">{title}</a><p>{abstract} ({source})</p></li>',
     		    imageItemHTML:'<li><a href="{url}"><img src="{thumbnail}" width="{thumbnailwidth}" height="{thumbnailheight}"></a></li>'
+    		    	//imageItemHTML:'<li><a href="{url}"><img src="{thumbnail}" width="{thumbnailwidth}" height="{thumbnailheight}"></a></li>'
     		  },
    clean =  function(s) {
   	    return encodeURIComponent(s);
     },
     
+    createContainer = function (id) {
+    	/****
+		 * CREATE CONTAINER */
+    	if(jQuery('#'+id).length==0) {
+    		jQuery('<div id="'+id+'"></div>').appendTo(jQuery(document.body));
+    		jQuery('#'+id).css({'position':'absolute','top':'0','left':'0','width':'100%','height':'100%','overflow':'hidden','z-index':'-2'});
+    		jQuery('#'+id+ " div").css({'position':'absolute','overflow':'hidden'});
+    	}
+    },
+    
     startContainer = function (container,query) {
+    	createContainer('image-container');
+    	console.log('startContainer'+container+jQuery('#image-container'));
     	container.innerHTML = _queries[query].htmlString;
     	container.style.display = "none";
     	//nosign(_queries[query].start,_queries[query].end,query);
     	//ou en passant les options :	
-    	console.log(jQuery('##webservice-return'+query))
+    	console.log(jQuery('#webservice-return'+query));
     	jQuery('#image-container').imagesLayer({
     		//id de la div contenant le retour du service
     		referer : container,		
@@ -136,6 +155,7 @@
     		posxMax : 0
     	});
     	
+    	createContainer('text-container');
     	//ou en passant les options :	
     	jQuery('#text-container').textsLayer({
     		//id de la div contenant le retour du service
@@ -174,15 +194,15 @@
     ;
      // logger.log("TOTO");
   /**
-   * LastFM popcorn plug-in
-   * Appends information about a LastFM artist to an element on the page.
+   * Labex popcorn plug-in
+   * Appends information about a Labex artist to an element on the page.
    * Options parameter will need a start, end, target, artist and apikey.
    * Start is the time that you want this plug-in to execute
    * End is the time that you want this plug-in to stop executing
-   * Artist is the name of who's LastFM information you wish to show
+   * Artist is the name of who's Labex information you wish to show
    * Target is the id of the document element that the images are
    *  appended to, this target element must exist on the DOM
-   * ApiKey is the API key registered with LastFM for use with their API
+   * ApiKey is the API key registered with Labex for use with their API
    *
    * @param {Object} options
    *
@@ -192,7 +212,7 @@
           start:          5,                                    // seconds, mandatory
           end:            15,                                   // seconds, mandatory
           query:         'yacht',                              // mandatory
-          target:         'lastfmdiv',                          // mandatory
+          target:         'Labexdiv',                          // mandatory
           apikey:         '1234567890abcdef1234567890abcdef'    // mandatory
         } )
    *
@@ -272,7 +292,7 @@
       
      
       /**
-       * @member LastFM
+       * @member Labex
        * The start function will be executed when the currentTime
        * of the video  reaches the start time provided by the
        * options variable
@@ -284,7 +304,7 @@
         //options._container.style.display = "inline";
       },
       /**
-       * @member LastFM
+       * @member Labex
        * The end function will be executed when the currentTime
        * of the video  reaches the end time provided by the
        * options variable

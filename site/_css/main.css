@@ -3,32 +3,22 @@
 div{
 	display:block;
 }
+video,div {
+	float: left;
+	display: inline;
+}
 
-#main{
+.content-div {
+	width: 300px;
+	height: 200px;
+	/*border: 1px solid #000;*/
+}
+
+#main {
+	min-width: 300px;
+	min-height: 200px;
 	width:100%;
 	height:100%;
 	overflow:hidden;
 }
 
-#image-container, #text-container{
-	position:absolute;
-	top:0;
-	left:0;
-	width:100%;	
-	height:100%;
-	overflow:hidden;
-}
-#image-container {
-	z-index:-2;	
-}
-#text-container {
-	z-index:-1;	
-}
-#image-container div{
-	position:absolute;
-	overflow:hidden;
-}
-
-#text-container div{
-	position:absolute;
-}
