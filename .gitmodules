@@ -7,3 +7,6 @@
 [submodule "site/lib/popcorn"]
 	path = site/lib/popcorn
 	url = git@github.com:larascasse/popcorn-js.git
+[submodule "butter"]
+	path = butter
+	url = git@github.com:larascasse/butter.git
