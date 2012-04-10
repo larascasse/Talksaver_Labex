@@ -51,6 +51,8 @@ function createSearchEvent(str) {
 	currentEventId = popcorn.getLastTrackEventId();
 	console.log("NEW EVENT " + currentEventId + " "
 			+ popcorn.getTrackEvent(currentEventId).query)
+	console.log("ALL EVENTS"+popcorn.getTrackEvents());
+	displayAllEvents();
 }
 function createSearchEventAndDispatch(str) {
 	createSearchEvent(str);
@@ -66,10 +68,33 @@ window.addEventListener("DOMContentLoaded", function() {
 		console.log("Click for search: "+ $("#inputsearch").val());
 		createSearchEventAndDispatch($("#inputsearch").val());
 	});
+	
+	$(".gototime").click(function() {
+		var time=jQuery(this).attr('data-start');
+		console.log("Click for time: "+ time);
+		popcorn.play(time);
+	});
+	
 
 }, false);
 
-
+function displayAllEvents() {
+	var id="div-events";
+	if(jQuery('#'+id).length==0) {
+		jQuery('<div id="'+id+'"></div>').appendTo(jQuery(document.body));
+		jQuery('#'+id).css({'position':'absolute','top':'0','left':'0','width':'200px','height':'500px','overflow':'hidden','z-index':'10'});
+		jQuery('#'+id+ " div").css({'position':'absolute','overflow':'hidden'});
+	}
+	var events = popcorn.getTrackEvents();
+	var html="<ul>";
+	for ( var i=0;i<events.length;i++) {
+		var event = events[i];
+		console.log(event._natives.type,event,event.query,event.start);
+		html+='<li>'+event.query+'<a class="gototime" href="#" data-start="'+event.start+'">go</a></li>';
+	}
+	jQuery('#'+id).html(html);
+	
+}
 
 /*
  * 

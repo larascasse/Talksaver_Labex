@@ -134,12 +134,12 @@
     
     startContainer = function (container,query) {
     	createContainer('image-container');
-    	console.log('startContainer'+container+jQuery('#image-container'));
+    	//console.log('startContainer'+container+jQuery('#image-container'));
     	container.innerHTML = _queries[query].htmlString;
     	container.style.display = "none";
     	//nosign(_queries[query].start,_queries[query].end,query);
     	//ou en passant les options :	
-    	console.log(jQuery('#webservice-return'+query));
+    	//console.log(jQuery('#webservice-return'+query));
     	jQuery('#image-container').imagesLayer({
     		//id de la div contenant le retour du service
     		referer : container,		
