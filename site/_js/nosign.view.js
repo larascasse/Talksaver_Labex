@@ -124,7 +124,7 @@ function buildMemory(){
 				});
 				
 				var imgs = jQuery(settings.referer).find('img');
-				console.log(imgs)
+				//console.log(imgs)
 				var columnWidth = winW/settings.grid;				
 				
 				for(var i=0; i<settings.grid; i++){						

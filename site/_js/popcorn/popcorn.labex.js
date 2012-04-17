@@ -33,6 +33,7 @@
 	    	//alert("num images"+o.bossresponse.images.count)
 	      databack.images = [];
 	      databack.imagesHTML = '<ul>';
+	      databack.thumbHTML = '<ul>';
 	      for(var i=0,j=o.bossresponse.images.count;i<j;i++){
 	        var item = o.bossresponse.images.results[i];
 	        var referer = item.refererurl;
@@ -66,8 +67,20 @@
 	        html = html.replace('{thumbnailheight}',item.height);
 	         */
 	        databack.imagesHTML += html;
+	        
+	        html = config.thumbItemHTML.replace('{url}',item.url);
+	        html = html.replace('{clickurl}',item.refererclickurl);
+	        html = html.replace('{shortened}',shorter);
+	        html = html.replace('{thumbnail}',item.thumbnailurl);
+	        html = html.replace('{thumbnailwidth}',item.thumbnailwidth);
+	        html = html.replace('{thumbnailheight}',item.thumbnailheight);
+	        html = html.replace('{title}',item.title);
+
+	        databack.thumbHTML += html;
+	        
 	      }
 	      databack.imagesHTML += '</ul>';
+	      databack.thumbHTML += '</ul>';
 	    }
 	    if(typeof o.bossresponse.news !== 'undefined' && o.bossresponse.news.count>0){
 	      databack.news = [];
@@ -100,22 +113,27 @@
         if ( databack.imagesHTML ) {
         	htmlString+=databack.imagesHTML; 
         }
+        if ( databack.thumbHTML ) {
+        	_queries[ o.query.name.toLowerCase() ].thumbHtmlString =databack.thumbHTML; 
+        }
         if ( databack.webHTML ) {
         	htmlString+=databack.webHTML; 
         }
         if ( databack.newsHTML ) {
         	htmlString+=databack.newsHTML; 
         }
-       _queries[ o.query.name.toLowerCase() ].htmlString = htmlString;
-      // console.log(_queries[ o.query.name.toLowerCase() ].started+" "+htmlString)
+        _queries[ o.query.name.toLowerCase() ].htmlString = htmlString;
+       
+       console.log('started'+_queries[ o.query.name.toLowerCase() ].started);
         if(_queries[ o.query.name.toLowerCase() ].started) {
-        	startContainer(_queries[ o.query.name.toLowerCase() ].container,o.query.name.toLowerCase())
+        	startContainer(_queries[ o.query.name.toLowerCase() ].container,o.query.name.toLowerCase());
         }
       },
       config = {
     		    webItemHTML:'<li><a href="{clickurl}">{title}</a><p>{abstract}</p></li>',
     		    newsItemHTML:'<li lang="{language}"><a href="{clickurl}">{title}</a><p>{abstract} ({source})</p></li>',
-    		    imageItemHTML:'<li><a href="{url}"><img src="{thumbnail}" width="{thumbnailwidth}" height="{thumbnailheight}"></a></li>'
+    		    imageItemHTML:'<li><a href="{url}"><img src="{thumbnail}" width="{thumbnailwidth}" height="{thumbnailheight}"></a></li>',
+    		    thumbItemHTML:'<li><a href="{url}"><img src="{thumbnail}"></a></li>'
     		    	//imageItemHTML:'<li><a href="{url}"><img src="{thumbnail}" width="{thumbnailwidth}" height="{thumbnailheight}"></a></li>'
     		  },
    clean =  function(s) {
@@ -132,10 +150,10 @@
     	}
     },
     
-    startContainer = function (container,query) {
-    	createContainer('image-container');
-    	//console.log('startContainer'+container+jQuery('#image-container'));
-    	container.innerHTML = _queries[query].htmlString;
+    showAsThumb = function (query) {
+    	jQuery('#div-events-thumb').append('<div class="bloc-thumblist '+query+'">'+_queries[query].thumbHtmlString+"</div>");
+    },
+    showAsFullscreen = function (container,query) {
     	container.style.display = "none";
     	//nosign(_queries[query].start,_queries[query].end,query);
     	//ou en passant les options :	
@@ -189,6 +207,16 @@
     		//delay pour le random
     		delay : 2000
     	});
+    },
+    
+    startContainer = function (container,query) {
+    	console.log('startContainer');
+    	container.style.display = "none";
+    	showAsThumb(query);
+    	createContainer('image-container');
+    	//console.log('startContainer'+container+jQuery('#image-container'));
+    	container.innerHTML = _queries[query].htmlString;
+    	
     	
     }
     ;
@@ -273,18 +301,23 @@
             count: 0,
             htmlString: "loading ...",
             searchtype : options.searchtype,
-            started: false,
+            started: true,
+            thumbHtmlString:"loading..",
             //container: options._container
             container: target
           };
-          target.innerHTML = "loading.."+options.query;
+          target.innerHTML = "loading.. :"+options.query;
           var APIurl = 'http://www.lesmecaniques.net/labex/yahooboss.php?q=' + clean(options.query)+"&type="+clean(options.searchtype)+"&callback=jsonp";
           Popcorn.getJSONP( APIurl, function( data ) {
         	    data.query={};
         	    data.query.name = options.query;
                 yahooBossCallback(data);
             });
-
+          
+          /*var appURL = 'http://localhost/labex/cake/projects/add';
+          console.log('envoie post')
+          jQuery.post( appURL ,{name:"TestXXX"+clean(options.query),user_id:"1"}); /* [, success(data, textStatus, jqXHR)] [, dataType] )
+          */
         }
         _queries[ options.query ].count++;
 
@@ -298,8 +331,10 @@
        * options variable
        */
       start: function( event, options ) {
-    	_queries[ options.query ].started = true;
-    	startContainer(options._container,options.query);
+    	  console.log('Labex event start');
+    	  _queries[ options.query ].started = true;
+    	  startContainer(options._container,options.query);
+    	 jQuery('.'+options.query).show();
         //options._container.innerHTML = _queries[ options.query ].htmlString;
         //options._container.style.display = "inline";
       },
@@ -313,8 +348,11 @@
     	  _queries[ options.query ].started = false;
         options._container.style.display = "none";
         options._container.innerHTML = "";
+        jQuery('.'+options.query).hide();
+        console.log("end",options.query)
       },
       _teardown: function( options ) {
+    	  console.log("_teardown",options.query);
         // cleaning possible reference to _artist array;
         --_queries[ options.query ].count || delete _queries[ options.query ];
         document.getElementById( options.target ) && document.getElementById( options.target ).removeChild( options._container );

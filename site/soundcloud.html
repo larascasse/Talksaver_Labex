@@ -4,7 +4,58 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
 <link rel="stylesheet" type="text/css" href="_css/style.css" />
-<link rel="stylesheet" type="text/css" href="_css/main.css" />
+<style>
+div{
+	display:block;
+}
+
+
+.content-div {
+	width: 300px;
+	height: 200px;
+	/*border: 1px solid #000;*/
+}
+
+#main {
+	width:100%;
+	position:absolute;
+	top:0; left:0;
+}
+
+#search {
+	position: absolute;
+	top:90px;
+	right:0;
+}
+#div-events {
+	position: absolute;
+	top:120px;
+	right:0;
+	width:150px;
+}
+
+#div-events-thumb {
+	position: absolute;
+	top:90px;
+	left:0;
+	
+}
+#div-events-thumb  .bloc-thumblist {
+	float:left;
+}
+#div-events-thumb  .bloc-thumblist  ul {
+	width:20px;
+}
+#div-events-thumb  .bloc-thumblist  ul li {
+	width:100%;
+	float:left;
+}
+#div-events-thumb  .bloc-thumblist ul li img {
+	width:100%;
+	/*float:left;*/
+}
+</style>
+
 
 
 <!--  JQUERY  -->
@@ -20,11 +71,19 @@
 <script src="../butter/external/popcorn-js/popcorn.js"></script>
 <script src="http://www.google.com/jsapi"></script>
 <script src="../butter/external/popcorn-js/plugins/footnote/popcorn.footnote.js"></script>
+<script src="../butter/external/popcorn-js/modules/player/popcorn.player.js"></script>
+<script src="../butter/external/popcorn-js/players/soundcloud/popcorn.soundcloud.js"></script>
 
 
 
 <!--  SOCKET  -->
 <script	src="http://ec2-79-125-59-26.eu-west-1.compute.amazonaws.com:80/socket.io/socket.io.js"></script>
+
+<!--  MODEL  -->
+<script src="lib/external/underscore-min.js"></script>
+<script src="lib/external/backbone.js"></script>
+<script src="_js/lesmecaniques_recorder.js"></script>
+
 
 <!--  LABEX  -->	
 <script src="_js/popcorn/popcorn.labex.js"></script>
@@ -36,9 +95,27 @@
 Popcorn(
 		function() {
 			console.log("popcorn ready");
-			popcorn = Popcorn('#butter-media-element-Media0');
+			popcorn = Popcorn( Popcorn.soundcloud( "main", "http://soundcloud.com/forss/flickermood", {
+		          width: "100%",
+		          /*
+		            This demo contains an api key used for retrieving comments from Soundcloud's API
+		            It is to be used for demonstration purposes only, and for only this demo
+		          */
+		          api: {
+		            key: "PRaNFlda6Bhf5utPjUsptg",
+		            commentdiv: "commentDisplay"/*,
+		            commentformat: (function() {
+		              var count = 0;
+		              
+		              return function( comment ) {
+		                return "<div>Comment # " + ( count++ ) + "<br />"
+		                        + "<em>" + comment.user.name + "</em>: " + comment.text +"</div>";
+		              }
+		            })()*/
+		          }
+		        }) );
 			popcorn.footnote( {
-				start : '10.56351464248285',
+				start : '2',
 				end : '34.11429440382051',
 				text : 'Bonjour tout le monde',
 				target : 'patrick_bouchain'
@@ -49,9 +126,9 @@ Popcorn(
 			 * query:'architecture bouchain', searchtype:'images,web,news'});
 			 */
 
-			popcorn.play();
-/*
-			socket = io
+			//popcorn.play();
+
+			/*socket = io
 					.connect('http://ec2-79-125-59-26.eu-west-1.compute.amazonaws.com');
 			socket.on('connect', function(data) {
 				console.log("socket connected");
@@ -69,20 +146,17 @@ Popcorn(
 
 </head>
 <body>
-	
+<div id="main" data-butter="media"></div>
 <div class="content-div" data-butter="target" id="pierre_giner"></div>
 <div class="content-div" data-butter="target" id="patrick_bouchain"></div>
 
-<div class="content-div"class="content-div" >
+<div class="content-div" id="search">
 	<input type="text" id="inputsearch">
 	<input type="button" value="ok" id="inputbutton"/>
 </div>
+<div id="div-events-thumb"></div>
 
 
-<div id="main" data-butter="media">
-	<video controls="" id="butter-media-element-Media0" autobuffer="true" preload="auto">
-	<source src="videos/17NOVOdileNouvelVO.webm" />
-</video>
 </div>
 </body>
 </html>

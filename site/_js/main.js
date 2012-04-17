@@ -2,38 +2,7 @@ var popcorn;
 var socket;
 var currentEventId;
 
-Popcorn(
-		function() {
-			console.log("popcorn ready");
-			popcorn = Popcorn('#butter-media-element-Media0');
-			popcorn.footnote( {
-				start : '10.56351464248285',
-				end : '34.11429440382051',
-				text : 'Bonjour tout le monde',
-				target : 'patrick_bouchain'
-			});
-			/*
-			 * popcorn.yahooboss({ start:'15.427888927924926',
-			 * end:'43.97866868926258', target:'pierre_giner',
-			 * query:'architecture bouchain', searchtype:'images,web,news'});
-			 */
 
-			popcorn.play();
-
-			socket = io
-					.connect('http://ec2-79-125-59-26.eu-west-1.compute.amazonaws.com');
-			socket.on('connect', function(data) {
-				console.log("socket connected");
-			});
-
-			socket.on('addEvent', function(data) {
-				console.log("recieve" + data.query);
-				if (currentEventId != data.id) {
-					createSearchEvent(data.query);
-				}
-			});
-
-		}, false);
 
 
 
@@ -51,11 +20,15 @@ function createSearchEvent(str) {
 	currentEventId = popcorn.getLastTrackEventId();
 	console.log("NEW EVENT " + currentEventId + " "
 			+ popcorn.getTrackEvent(currentEventId).query)
-	console.log("ALL EVENTS"+popcorn.getTrackEvents());
+	
+	//var e = new EventModel(popcorn.getTrackEvent(currentEventId));
+	var e = new EventModel({query:popcorn.getTrackEvent(currentEventId).query,start:popcorn.getTrackEvent(currentEventId).start,project_id:1,user_id:1,type:'yahooboss'});
+	e.save();
 	displayAllEvents();
 }
 function createSearchEventAndDispatch(str) {
 	createSearchEvent(str);
+	if(socket)
 	socket.emit('addEvent', {
 		query : popcorn.getTrackEvent(currentEventId).query,
 		id : currentEventId
@@ -68,22 +41,28 @@ window.addEventListener("DOMContentLoaded", function() {
 		console.log("Click for search: "+ $("#inputsearch").val());
 		createSearchEventAndDispatch($("#inputsearch").val());
 	});
+	refreshBehaviours();
+	
+	
+
+}, false);
+
+function refreshBehaviours() {
 	
 	$(".gototime").click(function() {
+		console.log("Click for time");
 		var time=jQuery(this).attr('data-start');
 		console.log("Click for time: "+ time);
 		popcorn.play(time);
 	});
-	
-
-}, false);
+}
 
 function displayAllEvents() {
 	var id="div-events";
 	if(jQuery('#'+id).length==0) {
 		jQuery('<div id="'+id+'"></div>').appendTo(jQuery(document.body));
-		jQuery('#'+id).css({'position':'absolute','top':'0','left':'0','width':'200px','height':'500px','overflow':'hidden','z-index':'10'});
-		jQuery('#'+id+ " div").css({'position':'absolute','overflow':'hidden'});
+		//jQuery('#'+id).css({'position':'absolute','top':'0','left':'0','width':'200px','height':'500px','overflow':'hidden','z-index':'10'});
+		//jQuery('#'+id+ " div").css({'position':'absolute','overflow':'hidden'});
 	}
 	var events = popcorn.getTrackEvents();
 	var html="<ul>";
@@ -93,6 +72,7 @@ function displayAllEvents() {
 		html+='<li>'+event.query+'<a class="gototime" href="#" data-start="'+event.start+'">go</a></li>';
 	}
 	jQuery('#'+id).html(html);
+	refreshBehaviours();
 	
 }
 
