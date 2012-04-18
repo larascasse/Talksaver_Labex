@@ -10,3 +10,6 @@
 [submodule "butter"]
 	path = butter
 	url = git@github.com:larascasse/butter.git
+[submodule "site/lib/external/isotope"]
+	path = site/lib/external/isotope
+	url = https://github.com/desandro/isotope.git

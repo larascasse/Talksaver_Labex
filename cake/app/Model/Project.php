@@ -12,7 +12,7 @@ class Project extends AppModel {
  * @var string
  */
 	public $displayField = 'name';
-	var $belongsTo = 'User'; 
+	var $belongsTo = 'User,Media'; 
 /**
  * Validation rules
  *

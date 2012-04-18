@@ -1,8 +1,8 @@
 // PLUGIN: LABEX
-var _queries = {};
+
 (function ( Popcorn ) {
 
-	//var _queries = {},
+	var _queries = {},
 	
 	yahooBossCallback = function( o ) {
 		var databack = {};
@@ -33,8 +33,7 @@ var _queries = {};
 	    	//alert("num images"+o.bossresponse.images.count)
 	      databack.images = [];
 	      databack.imagesHTML = '<ul>';
-	      //databack.thumbHTML = '<ul>';
-	      databack.thumbHTML = '';
+	      databack.thumbHTML = '<ul>';
 	      for(var i=0,j=o.bossresponse.images.count;i<j;i++){
 	        var item = o.bossresponse.images.results[i];
 	        var referer = item.refererurl;
@@ -76,13 +75,12 @@ var _queries = {};
 	        html = html.replace('{thumbnailwidth}',item.thumbnailwidth);
 	        html = html.replace('{thumbnailheight}',item.thumbnailheight);
 	        html = html.replace('{title}',item.title);
-	        html = html.replace('{classe}','query_'+o.query.name.toLowerCase());
 
 	        databack.thumbHTML += html;
 	        
 	      }
 	      databack.imagesHTML += '</ul>';
-	      //databack.thumbHTML += '</ul>';
+	      databack.thumbHTML += '</ul>';
 	    }
 	    if(typeof o.bossresponse.news !== 'undefined' && o.bossresponse.news.count>0){
 	      databack.news = [];
@@ -135,8 +133,7 @@ var _queries = {};
     		    webItemHTML:'<li><a href="{clickurl}">{title}</a><p>{abstract}</p></li>',
     		    newsItemHTML:'<li lang="{language}"><a href="{clickurl}">{title}</a><p>{abstract} ({source})</p></li>',
     		    imageItemHTML:'<li><a href="{url}"><img src="{thumbnail}" width="{thumbnailwidth}" height="{thumbnailheight}"></a></li>',
-    		    //thumbItemHTML:'<div class="item toto {classe}"><a href="{url}" target="_blank"><img src="{thumbnail}"></a></div>'
-    		    thumbItemHTML:'<div class="item toto {classe}"><img src="{thumbnail}"  width="{thumbnailwidth}" height="{thumbnailheight}"></div>'
+    		    thumbItemHTML:'<li><a href="{url}"><img src="{thumbnail}"></a></li>'
     		    	//imageItemHTML:'<li><a href="{url}"><img src="{thumbnail}" width="{thumbnailwidth}" height="{thumbnailheight}"></a></li>'
     		  },
    clean =  function(s) {
@@ -154,55 +151,11 @@ var _queries = {};
     },
     
     showAsThumb = function (query) {
+    	var div = jQuery('.thumb-'+query);
+    	if(div.length==0) {
+    		jQuery('#div-events-thumb').append('<div class="bloc-thumblist thumb-'+query+'">'+_queries[query].thumbHtmlString+"</div>");
+    	}
     	
-    	var div= jQuery('#div-events-thumb');
-    	console.log('showAsThumb'+div.children().length);
-    	var $newItems = jQuery(_queries[query].thumbHtmlString);
-    	if(div.children().length==0) {
-    		console.log("create isotop");
-    		div.append($newItems);
-    		div.isotope({
-    				masonryHorizontal: {
-    		    rowHeight: 360
-    		  }
-    		});
-    		// change size of clicked element
-    	      div.delegate( '.item', 'click', function(){
-    	        jQuery(this).toggleClass('large');
-    	        div.isotope('reLayout');
-    	      });
-    	      //JQueryImageLoaded
-    	      div.imagesLoaded( function(){
-    	    	  console.log("IMAGES LOADED")
-    	          div.isotope('reLayout');
-    	    	  
-    	        });
-    	      
-    		/*div.isotope({
-    			itemSelector : '.item',
-    			layoutMode:'fitRows'
-    		});*/
-    		
-    	}
-    	else {
-    		console.log("update isotop");
-    		div.isotope( 'insert', $newItems);
-    		div.isotope('reLayout');
-    		div.isotope('shuffle');
-    		 //JQueryImageLoaded
-  	      div.imagesLoaded( function(){
-  	    	  console.log("IMAGES LOADED")
-  	          div.isotope('reLayout');
-  	        });
-    	}
-    	// toggle variable sizes of all elements
-       //div.toggleClass('variable-sizes').isotope('reLayout');
-       //div.isotope('shuffle');
-       
-       var $container = $('#container');
-
-       
-
     },
     showAsFullscreen = function (container,query) {
     	container.style.display = "none";
@@ -354,24 +307,21 @@ var _queries = {};
             count: 0,
             htmlString: "loading ...",
             searchtype : options.searchtype,
-            started: true,
+            started: false,
             thumbHtmlString:"loading..",
             //container: options._container
             container: target
           };
           target.innerHTML = "loading.. :"+options.query;
           var APIurl = 'http://www.lesmecaniques.net/labex/yahooboss.php?q=' + clean(options.query)+"&type="+clean(options.searchtype)+"&callback=jsonp";
-          //We don't add the same images if exusting
-          if(_queries[ options.query ].count==0) {
-        	  Popcorn.getJSONP( APIurl, function( data ) {
+          Popcorn.getJSONP( APIurl, function( data ) {
         	    data.query={};
         	    data.query.name = options.query;
                 yahooBossCallback(data);
             });
-          }
         }
         _queries[ options.query ].count++;
-        console.log("TOTAL QUEY"+_queries[ options.query ].count)
+
       },
       
      
@@ -384,9 +334,8 @@ var _queries = {};
       start: function( event, options ) {
     	  console.log('Labex event start '+options.query);
     	  _queries[ options.query ].started = true;
-    	  console.log("add filter "+'query_'+options.query.toLowerCase() )
-    	  jQuery('#div-events-thumb').isotope({ filter: '.query_'+options.query.toLowerCase() })
-    	  //startContainer(options._container,options.query);
+    	  startContainer(options._container,options.query);
+    	 jQuery('.thumb-'+options.query).show();
         //options._container.innerHTML = _queries[ options.query ].htmlString;
         //options._container.style.display = "inline";
       },
@@ -401,8 +350,7 @@ var _queries = {};
     	  _queries[ options.query ].started = false;
         options._container.style.display = "none";
         options._container.innerHTML = "";
-        
-        jQuery('#div-events-thumb').isotope({ filter: null })
+        jQuery('.thumb-'+options.query).hide();
         
       },
       _teardown: function( options ) {

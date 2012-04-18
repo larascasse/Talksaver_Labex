@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
 <link rel="stylesheet" type="text/css" href="_css/style.css" />
+<link rel="stylesheet" type="text/css" href="_css/isotope.css" />
 <style>
 div{
 	display:block;
@@ -13,41 +14,78 @@ div{
 .content-div {
 	width: 300px;
 	height: 200px;
-	/*border: 1px solid #000;*/
+	border: 1px solid #000;
+	position:absolute;
+	top:200px;
 }
 
 #main {
 	width:100%;
 	position:absolute;
-	top:0; left:0;
+	top:0; left:0
 }
 
-#search {
-	position: absolute;
-	top:90px;
-	right:0;
+#main2, #butter-media-element-Media0 {
+	width:100%;
+	height:100%;
+	position:absolute;
+	top:50px; left:0;
+	z-index:900;
 }
-#div-events {
+
+#event-editor {
 	position: absolute;
 	top:120px;
-	right:0;
-	width:150px;
+	right:20px;
+	width:250px;
+	border: 1px solid #000;
+	padding:5px 5px 5px 5px;
+	z-index:3;
+	background-color:#ffffff;
 }
 
-#div-events-thumb {
+#event-editor .box {
+	width:100%;
+	margin-top:10px;
+	margin-bottom:10px;
+	display:block;
+}
+
+#event-editor input {
+	width:80%;
+}
+
+#div-events-container {
 	position: absolute;
 	top:90px;
 	left:0;
+	width:100%;
+	height:500px;
+	display:block;
+	/*background-color:#ffffff;*/
+	
+}
+
+#div-events-thumb {
+	
+	height:100%;
+	
+}
+
+#div-events-thumb div{
+	/*background-color:#ffffff;*/
 	
 }
 #div-events-thumb  .bloc-thumblist {
 	float:left;
 }
 #div-events-thumb  .bloc-thumblist  ul {
-	width:20px;
+	width:50px;
+	display:block;
 }
 #div-events-thumb  .bloc-thumblist  ul li {
 	width:100%;
+	display:block;
 	float:left;
 }
 #div-events-thumb  .bloc-thumblist ul li img {
@@ -64,20 +102,22 @@ div{
 <script	src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js"></script>
 <script src="lib/external/modernizr-2.0.6.min.js"></script>
 <script type="text/javascript" src="lib/external/jquery.transit.min.js"></script>
+<script type="text/javascript" src="lib/external/isotope/jquery.isotope.min.js"></script>
+<script type="text/javascript" src="lib/external/jquery.imagesloaded.min.js"></script>
 
 
 
 <!--  POPCORN  -->
 <script src="../butter/external/popcorn-js/popcorn.js"></script>
-<script src="http://www.google.com/jsapi"></script>
-<script src="../butter/external/popcorn-js/plugins/footnote/popcorn.footnote.js"></script>
 <script src="../butter/external/popcorn-js/modules/player/popcorn.player.js"></script>
 <script src="../butter/external/popcorn-js/players/soundcloud/popcorn.soundcloud.js"></script>
 
+<script src="../butter/external/popcorn-js/plugins/footnote/popcorn.footnote.js"></script>
 
 
-<!--  SOCKET  -->
-<script	src="http://ec2-79-125-59-26.eu-west-1.compute.amazonaws.com:80/socket.io/socket.io.js"></script>
+
+<!--  SOCKET  
+<script	src="http://ec2-79-125-59-26.eu-west-1.compute.amazonaws.com:80/socket.io/socket.io.js"></script>-->
 
 <!--  MODEL  -->
 <script src="lib/external/underscore-min.js"></script>
@@ -92,40 +132,48 @@ div{
 <!-- lanceur -->
 <script type="text/javascript" src="_js/main.js"></script>
 <script>
+var popcorn;
+var socket;
 Popcorn(
 		function() {
+	
 			console.log("popcorn ready");
-			popcorn = Popcorn( Popcorn.soundcloud( "main", "http://soundcloud.com/forss/flickermood", {
-		          width: "100%",
-		          /*
-		            This demo contains an api key used for retrieving comments from Soundcloud's API
-		            It is to be used for demonstration purposes only, and for only this demo
-		          */
-		          api: {
-		            key: "PRaNFlda6Bhf5utPjUsptg",
-		            commentdiv: "commentDisplay"/*,
-		            commentformat: (function() {
-		              var count = 0;
-		              
-		              return function( comment ) {
-		                return "<div>Comment # " + ( count++ ) + "<br />"
-		                        + "<em>" + comment.user.name + "</em>: " + comment.text +"</div>";
-		              }
-		            })()*/
-		          }
-		        }) );
+			/*popcorn = Popcorn( Popcorn.soundcloud( "main", "http://soundcloud.com/forss/flickermood", {width: "100%"}) );
+			popcorn.video.registerPopcornWithPlayer( popcorn );
+			//popcorn = Popcorn('#butter-media-element-Media0');
+			console.log("popcorn ready" + popcorn.video);
+
 			popcorn.footnote( {
 				start : '2',
 				end : '34.11429440382051',
 				text : 'Bonjour tout le monde',
 				target : 'patrick_bouchain'
 			});
-			/*
-			 * popcorn.yahooboss({ start:'15.427888927924926',
-			 * end:'43.97866868926258', target:'pierre_giner',
-			 * query:'architecture bouchain', searchtype:'images,web,news'});
-			 */
+			popcorn.play();
+			
 
+			
+			popcorn.listen( "load", function() {
+		      
+		          
+		          popcorn.listen( "timeupdate", function() {
+		            //console.log("timeupdate");
+		          });
+		          
+		          popcorn.video.addEventListener( "readystatechange", function() {
+		       
+		            console.log("readystatechange"+popcorn.video.readyState);
+		          });
+		          popcorn.trigger( "play" );
+		        });
+
+			*/
+	          
+			  /*popcorn.yahooboss({ start:'2.427888927924926',
+			  end:'43.97866868926258', target:'pierre_giner',
+			  query:'architecture bouchain', searchtype:'images,web,news'});*/
+			 
+			 // popcorn.trigger( "play" );
 			//popcorn.play();
 
 			/*socket = io
@@ -147,15 +195,38 @@ Popcorn(
 </head>
 <body>
 <div id="main" data-butter="media"></div>
+<br />
+
+
 <div class="content-div" data-butter="target" id="pierre_giner"></div>
 <div class="content-div" data-butter="target" id="patrick_bouchain"></div>
 
-<div class="content-div" id="search">
-	<input type="text" id="inputsearch">
-	<input type="button" value="ok" id="inputbutton"/>
-</div>
-<div id="div-events-thumb"></div>
 
+
+<div id="div-events-container">
+<div id="div-events-thumb"></div>
+</div>
+
+<div id="event-editor">
+	<div  class="box">
+		<ul>
+		<li><a href="#/projects/1">Project 1</a></li>
+		<li><a href="#/projects/3">Project 3</a></li>
+		</ul>
+	</div>
+	<div id="search" class="box">
+		<input type="text" id="inputsearch">
+		<input type="button" value="ok" id="inputbutton"/>
+	</div>
+	<div id="div-events"  class="box"></div>
+	
+</div>
+
+<!-- <div id="main2" data-butter="media">
+	<video controls="" id="butter-media-element-Media0" autobuffer="true" preload="auto">
+	<source src="videos/17NOVOdileNouvelVO.webm" />
+</video>
+-->
 
 </div>
 </body>

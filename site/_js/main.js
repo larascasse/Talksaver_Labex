@@ -1,5 +1,3 @@
-var popcorn;
-var socket;
 var currentEventId;
 
 
@@ -22,7 +20,7 @@ function createSearchEvent(str) {
 			+ popcorn.getTrackEvent(currentEventId).query)
 	
 	//var e = new EventModel(popcorn.getTrackEvent(currentEventId));
-	var e = new EventModel({query:popcorn.getTrackEvent(currentEventId).query,start:popcorn.getTrackEvent(currentEventId).start,project_id:1,user_id:1,type:'yahooboss'});
+	var e = new EventModel({query:popcorn.getTrackEvent(currentEventId).query,start:popcorn.getTrackEvent(currentEventId).start,end:popcorn.getTrackEvent(currentEventId).end,project_id:1,user_id:1,type:'yahooboss'});
 	e.save();
 	displayAllEvents();
 }
@@ -58,6 +56,7 @@ function refreshBehaviours() {
 }
 
 function displayAllEvents() {
+	console.log("Display All EVents");
 	var id="div-events";
 	if(jQuery('#'+id).length==0) {
 		jQuery('<div id="'+id+'"></div>').appendTo(jQuery(document.body));
@@ -69,7 +68,7 @@ function displayAllEvents() {
 	for ( var i=0;i<events.length;i++) {
 		var event = events[i];
 		console.log(event._natives.type,event,event.query,event.start);
-		html+='<li>'+event.query+'<a class="gototime" href="#" data-start="'+event.start+'">go</a></li>';
+		html+='<li>'+event.query+' ('+event.start+'/'+event.end+') <a class="gototime" href="#" data-start="'+event.start+'">go</a></li>';
 	}
 	jQuery('#'+id).html(html);
 	refreshBehaviours();
