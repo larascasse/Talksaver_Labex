@@ -4,8 +4,8 @@ require("OAuth.php");
 $cc_key  = "dj0yJmk9MHA2UHpwSmF3Yzg3JmQ9WVdrOVpUWnlWbEl5TXpBbWNHbzlNelV4TnpZME16WXkmcz1jb25zdW1lcnNlY3JldCZ4PTBk";
 $cc_secret = "2e6dbfddf513ca6d07f7c4bacec52eabfb772058";
 $url = "http://yboss.yahooapis.com/ysearch/";
-if(_GET["type"]) {
-	$url.=_GET["type"];
+if(isset($_GET["type"])) {
+	$url.=$GET["type"];
 }
 else {
 	$url.= "news,web,images";

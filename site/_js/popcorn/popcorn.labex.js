@@ -360,7 +360,8 @@ var _queries = {};
             container: target
           };
           target.innerHTML = "loading.. :"+options.query;
-          var APIurl = 'http://www.lesmecaniques.net/labex/yahooboss.php?q=' + clean(options.query)+"&type="+clean(options.searchtype)+"&callback=jsonp";
+          //var APIurl = 'http://www.lesmecaniques.net/labex/yahooboss.php?q=' + clean(options.query)+"&type="+clean(options.searchtype)+"&callback=jsonp";
+          var APIurl = 'http://127.0.0.1/labex/site/cpv.php?q=' + clean(options.query)+"&type="+clean(options.searchtype)+"&callback=jsonp";
           //We don't add the same images if exusting
           if(_queries[ options.query ].count==0) {
         	  Popcorn.getJSONP( APIurl, function( data ) {
@@ -385,10 +386,12 @@ var _queries = {};
     	  console.log('Labex event start '+options.query);
     	  _queries[ options.query ].started = true;
     	  console.log("add filter "+'query_'+options.query.toLowerCase() )
-    	  jQuery('#div-events-thumb').isotope({ filter: '.query_'+options.query.toLowerCase() })
+    	  //jQuery('#div-events-thumb').isotope({ filter: '.query_'+options.query.toLowerCase() })
     	  //startContainer(options._container,options.query);
         //options._container.innerHTML = _queries[ options.query ].htmlString;
         //options._container.style.display = "inline";
+    	  //jQuery('#div-events-thumb').isotope({ orderby: '.query_'+options.query.toLowerCase() })
+    	  jQuery('#div-events-thumb').isotope("shuffle");
       },
       /**
        * @member Labex
@@ -402,7 +405,7 @@ var _queries = {};
         options._container.style.display = "none";
         options._container.innerHTML = "";
         
-        jQuery('#div-events-thumb').isotope({ filter: null })
+        //jQuery('#div-events-thumb').isotope({ filter: null })
         
       },
       _teardown: function( options ) {
