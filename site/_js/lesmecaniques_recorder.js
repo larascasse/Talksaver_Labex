@@ -214,7 +214,8 @@ function createPopcornEvent(event) {
 		end : event.get('end'),
 		target : 'pierre_giner',
 		query : event.get('query'),
-		searchtype : 'images,web,news'
+		searchtype : 'images,web,news',
+		enginetype : event.get('type')
 	});
 
 }
