@@ -326,7 +326,12 @@ var _queries = {};
             elem: "input",
             type: "text",
             label: "Type : web,news,images"
-          }
+          },
+          enginetype: {
+              elem: "input",
+              type: "text",
+              label: "Engine : yahooboss ou cpv"
+            }
         }
         },
     	
@@ -360,8 +365,9 @@ var _queries = {};
             container: target
           };
           target.innerHTML = "loading.. :"+options.query;
-          //var APIurl = 'http://www.lesmecaniques.net/labex/yahooboss.php?q=' + clean(options.query)+"&type="+clean(options.searchtype)+"&callback=jsonp";
-          var APIurl = 'http://127.0.0.1/labex/site/cpv.php?q=' + clean(options.query)+"&type="+clean(options.searchtype)+"&callback=jsonp";
+          var APIurl = '/labex/yahooboss.php?q=' + clean(options.query)+"&type="+clean(options.searchtype)+"&callback=jsonp";
+          if(options.enginetype=="cpv")
+        	  APIurl = '/labex/site/cpv.php?q=' + clean(options.query)+"&type="+clean(options.searchtype)+"&callback=jsonp";
           //We don't add the same images if exusting
           if(_queries[ options.query ].count==0) {
         	  Popcorn.getJSONP( APIurl, function( data ) {

@@ -1,6 +1,6 @@
 Backbone.emulateHTTP = true;
 // Backbone.emulateJSON = true;
-var appUrl = 'http://localhost/labex/cake';
+var appUrl = '/labex/cake';
 var EventRouter = Backbone.Router.extend( {
 	initialize : function(options) {
 		console.log("Route initialize");
