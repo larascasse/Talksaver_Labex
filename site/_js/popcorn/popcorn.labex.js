@@ -1,5 +1,7 @@
 // PLUGIN: LABEX
 var _queries = {};
+var _filters={};
+
 (function ( Popcorn ) {
 
 	//var _queries = {},
@@ -76,7 +78,7 @@ var _queries = {};
 	        html = html.replace('{thumbnailwidth}',item.thumbnailwidth);
 	        html = html.replace('{thumbnailheight}',item.thumbnailheight);
 	        html = html.replace('{title}',item.title);
-	        html = html.replace('{classe}','query_'+o.query.name.toLowerCase());
+	        html = html.replace('{classe}',getClassName(o.query.name));
 
 	        databack.thumbHTML += html;
 	        
@@ -143,6 +145,11 @@ var _queries = {};
   	    return encodeURIComponent(s);
     },
     
+    getClassName =  function(s) {
+    	s =  s.replace(/[^a-zA-Z 0-9]+/g,'');
+  	    return escape('query_'+s.toLowerCase());
+    },
+    
     createContainer = function (id) {
     	/****
 		 * CREATE CONTAINER */
@@ -188,7 +195,7 @@ var _queries = {};
     		console.log("update isotop");
     		div.isotope( 'insert', $newItems);
     		div.isotope('reLayout');
-    		div.isotope('shuffle');
+    		//div.isotope('shuffle');
     		 //JQueryImageLoaded
   	      div.imagesLoaded( function(){
   	    	  console.log("IMAGES LOADED")
@@ -264,6 +271,7 @@ var _queries = {};
     	console.log('startContainer');
     	container.style.display = "none";
     	showAsThumb(query);
+    	jQuery('#div-events-thumb').isotope("shuffle");
     	createContainer('image-container');
     	//console.log('startContainer'+container+jQuery('#image-container'));
     	container.innerHTML = _queries[query].htmlString;
@@ -365,11 +373,12 @@ var _queries = {};
             container: target
           };
           target.innerHTML = "loading.. :"+options.query;
-          var APIurl = '/labex/yahooboss.php?q=' + clean(options.query)+"&type="+clean(options.searchtype)+"&callback=jsonp";
+          var APIurl = 'http://www.lesmecaniques.net/labex/yahooboss.php?q=' + clean(options.query)+"&type="+clean(options.searchtype)+"&callback=jsonp";
           if(options.enginetype=="cpv")
-        	  APIurl = '/labex/site/cpv.php?q=' + clean(options.query)+"&type="+clean(options.searchtype)+"&callback=jsonp";
+        	  APIurl = 'http://www.lesmecaniques.net/labex/site/cpv.php?q=' + clean(options.query)+"&type="+clean(options.searchtype)+"&callback=jsonp";
           //We don't add the same images if exusting
           if(_queries[ options.query ].count==0) {
+        	  console.log("SEND REQUEST");
         	  Popcorn.getJSONP( APIurl, function( data ) {
         	    data.query={};
         	    data.query.name = options.query;
@@ -391,13 +400,18 @@ var _queries = {};
       start: function( event, options ) {
     	  console.log('Labex event start '+options.query);
     	  _queries[ options.query ].started = true;
-    	  console.log("add filter "+'query_'+options.query.toLowerCase() )
+    	  console.log("add filter "+getClassName(options.query));
+    	  jQuery('.'+getClassName(options.query)).addClass("started");
+    	 // jQuery('.'+getClassName(options.query)).css({opacity:1});
+
     	  //jQuery('#div-events-thumb').isotope({ filter: '.query_'+options.query.toLowerCase() })
     	  //startContainer(options._container,options.query);
         //options._container.innerHTML = _queries[ options.query ].htmlString;
         //options._container.style.display = "inline";
-    	  //jQuery('#div-events-thumb').isotope({ orderby: '.query_'+options.query.toLowerCase() })
-    	  jQuery('#div-events-thumb').isotope("shuffle");
+    	  //_filters[(getClassName(options.query)]="";
+    	  
+    	 jQuery('#div-events-thumb').isotope({ filter: '.'+getClassName(options.query)});
+    	  //jQuery('#div-events-thumb').isotope("shuffle");
       },
       /**
        * @member Labex
@@ -410,7 +424,7 @@ var _queries = {};
     	  _queries[ options.query ].started = false;
         options._container.style.display = "none";
         options._container.innerHTML = "";
-        
+        jQuery('.'+getClassName(options.query)).removeClass("started");
         //jQuery('#div-events-thumb').isotope({ filter: null })
         
       },

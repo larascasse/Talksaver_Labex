@@ -1,6 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
-App::uses('JsonResponse', 'Json.Network');
+//App::uses('JsonResponse', 'Json.Network');
 /**
  * Projects Controller
  *
@@ -15,6 +15,7 @@ class ProjectsController extends AppController {
 	public $scaffold;
 
 	public function popcorn($id=null) {
+		Configure::write('debug',0);
 		if ( $this->RequestHandler->isAjax() ) {
 			$this->request->data = array("Project"=>$this->request->data);
 			//return new JsonResponse($this->request->data);
@@ -46,8 +47,10 @@ class ProjectsController extends AppController {
 		$this->Project->unbindModel(array('belongsTo' => array('User')));
 		
 		$data = $this->Project->findById($this->Project->id);
-		
-		return new JsonResponse($data);
+		$this->data = $data;
+		//return new JsonResponse($data);
+		$this->set(compact('data'));
+	    $this->set('_serialize', 'data');
 
 	}
 

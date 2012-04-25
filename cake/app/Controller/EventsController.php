@@ -1,6 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
-App::uses('JsonResponse', 'Json.Network');
+//App::uses('JsonResponse', 'Json.Network');
 /**
  * Events Controller
  *
@@ -24,7 +24,10 @@ class EventsController extends AppController {
 		$this->Event->recursive = 0;
 		$this->Event->unbindModel(array('belongsTo' => array('User','Project')));
 		 $data = $this->Event->findAllByProjectId($id_project);
-        return new JsonResponse($data);
+        	$this->data = $data;
+			//return new JsonResponse($data);
+			$this->set(compact('data'));
+		    $this->set('_serialize', 'data');
 		
 	}
 	
@@ -59,7 +62,10 @@ class EventsController extends AppController {
 		$this->Event->recursive = 0;
 		$this->Event->unbindModel(array('belongsTo' => array('User','Project')));
 		$data = $this->Event->findById($this->Event->id);
-        return new JsonResponse($data);
+        	$this->data = $data;
+			//return new JsonResponse($data);
+			$this->set(compact('data'));
+		    $this->set('_serialize', 'data');
 		
 	}
 

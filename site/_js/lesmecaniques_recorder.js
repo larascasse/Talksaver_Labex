@@ -29,9 +29,13 @@ var EventRouter = Backbone.Router.extend( {
 	},
 
 	projects : function(project_id) {
-		
-		window.ProjectModel.url = appUrl + '/projects/popcorn/'+ project_id;
-		window.ProjectModel.fetch({success: function(model,response) { createPopcorn(model); }});
+
+		window.ProjectModel.url = appUrl + '/projects/popcorn/' + project_id;
+		window.ProjectModel.fetch( {
+			success : function(model, response) {
+				createPopcorn(model);
+			}
+		});
 	},
 
 	events : function(project_id) {
@@ -94,9 +98,9 @@ var EventModel = Backbone.Model.extend( {
 },
 save : function(attributes, options) {
 	attributes || (attributes = {});
-	if(this.attributes["end"]==0) 
-		this.attributes["end"]=10000;
-	this.attributes["project_id"]=window.ProjectModel.id;
+	if (this.attributes["end"] == 0)
+		this.attributes["end"] = 10000;
+	this.attributes["project_id"] = window.ProjectModel.id;
 	attributes['Event'] = this.attributes;
 	Backbone.Model.prototype.save.call(this, attributes, options);
 },
@@ -118,7 +122,6 @@ validate : function(attrs) {
 
 });
 
-
 var ProjectModel = Backbone.Model.extend( {
 
 	urlRoot : function() {
@@ -128,7 +131,7 @@ var ProjectModel = Backbone.Model.extend( {
 	// à chaque fois que j'instancie ce type de modèle
 	initialize : function(attrs, options) {
 		console.log('New ProjectModel');
-		
+
 		// this.fetch();
 		// J'écoute sur l'évènement 'error' au cas où si la validation a échoué
 		this.on('error', function(model, err) {
@@ -138,7 +141,7 @@ var ProjectModel = Backbone.Model.extend( {
 	},
 	set : function(attributes, options) {
 		// map JSON obkect to ProjectModel
-		console.log(attributes);
+	console.log(attributes);
 	if (attributes.Project) {
 		this.set(attributes.Project, options);
 		_.each(attributes.Project, function(constructor, key) {
@@ -202,16 +205,15 @@ var EventsCollectionModel = Backbone.Collection.extend( {
 
 });
 
-
 function testLog(model) {
 	console.log("llllllllll" + model)
 }
 
 function createPopcornEvent(event) {
-	//console.log('createPopcornEvent' + event.get('start'));
+	// console.log('createPopcornEvent' + event.get('start'));
 	popcorn.yahooboss( {
 		start : event.get('start'),
-		end : event.get('end'),
+		end : parseFloat(event.get('start'))+10,//event.get('end'),
 		target : 'pierre_giner',
 		query : event.get('query'),
 		searchtype : 'images,web,news',
@@ -221,37 +223,58 @@ function createPopcornEvent(event) {
 }
 
 function clearAllPopcornEvents() {
-	console.log('clearAllPopcornEvents total: '+popcorn.getTrackEvents().length);
+	console.log('clearAllPopcornEvents total: ' + popcorn.getTrackEvents().length);
 	var events = popcorn.getTrackEvents();
 	for ( var i = 0; i < events.length; i++) {
 		var event = events[i];
 		popcorn.removeTrackEvent(event._id);
 	}
+	
+}
+
+function removeThumbs() {
+	jQuery("#div-events-thumb").html('');
 }
 
 function createPopcorn(projectModel) {
-	console.log('createPopcorn projectModel: '+popcorn);
-	console.log(projectModel);
-	if(popcorn) {
+	console.log('createPopcorn projectModel: ' + popcorn);
+	removeThumbs();
+	if (popcorn) {
 		console.log('try detroy popcorn');
 		popcorn.pause();
 		Popcorn.destroy(popcorn);
 		jQuery("#main").html('');
 	}
-	var media =projectModel.get('Media'); 
-	if(media && media.type=="soundcloud") {
+	var media = projectModel.get('Media');
+	if (media && media.type == "soundcloud") {
 		console.log('create soundcloud');
-		popcorn = Popcorn( Popcorn.soundcloud( "main", "http://soundcloud.com/forss/flickermood", {width: "100%"}) );
-		popcorn.video.registerPopcornWithPlayer( popcorn );
-		window.eventRouter.navigate("projects/"+projectModel.id+"/events", {trigger: true});
-	}
-	else if(media){
-		console.log('create video');
-		var html='<video controls="" id="butter-media-element-Media0" autobuffer="true" preload="auto"><source src="videos/'+media.url+'.webm" /></video>';
+		popcorn = Popcorn(Popcorn.soundcloud("main",
+				"http://soundcloud.com/forss/flickermood", {
+					width : "100%"
+				}));
+		popcorn.video.registerPopcornWithPlayer(popcorn);
+		window.eventRouter.navigate("projects/" + projectModel.id + "/events",
+				{
+					trigger : true
+				});
+	} else if (media) {
+		console.log('create video'+media.type);
+		var sourceUrl = '';
+		var html = '';
+		if (media.type == "audio") {
+			sourceUrl += '<source src="videos/' + media.url+'" />';
+			html = '<audio controls="controls" id="butter-media-element-Media0" autobuffer="true" preload="auto">'+sourceUrl+'</audio>';
+		} else {
+			sourceUrl += '<source src="videos/' + media.url + '.webm" />';
+			html = '<video controls="controls" id="butter-media-element-Media0" autobuffer="true" preload="auto">'+sourceUrl+'</video>';
+		}
 		jQuery("#main").html(html);
 		popcorn = Popcorn('#butter-media-element-Media0');
 		popcorn.play();
-		window.eventRouter.navigate("projects/"+projectModel.id+"/events", {trigger: true});
+		window.eventRouter.navigate("projects/" + projectModel.id + "/events",
+				{
+					trigger : true
+				});
 	}
 }
 
