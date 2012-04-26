@@ -13,3 +13,6 @@
 [submodule "site/lib/external/isotope"]
 	path = site/lib/external/isotope
 	url = https://github.com/desandro/isotope.git
+[submodule "libs_php/arc2"]
+	path = libs_php/arc2
+	url = https://github.com/semsol/arc2.git
