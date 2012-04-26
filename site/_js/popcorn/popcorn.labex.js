@@ -1,6 +1,27 @@
 // PLUGIN: LABEX
 var _queries = {};
-var _filters={};
+var _filters=new Array();
+var _colors=["#D10721","#BF852F","#A2BF2F","#4CBF2F","#2FBF69","#2FBFBF","#2F69BF","#4C2FBF"];
+function getColor(s) {
+	console.log("Color "+_colors[Math.floor(Math.random()*_colors.length)])
+	return _colors[Math.floor(Math.random()*_colors.length)];
+}
+function addFilter(str) {
+	_filters.push(str);
+}
+function removeFilter(str) {
+	if(null!=str) {
+		for (var i=0; i<_filters.length;i++) {
+			if(_filters[i]==str) {
+				_filters.splice(i,1);
+				break;
+			}
+		}	
+	}
+	else {
+		_filters = new Array();
+	}
+}
 
 (function ( Popcorn ) {
 
@@ -8,7 +29,7 @@ var _filters={};
 	
 	yahooBossCallback = function( o ) {
 		var databack = {};
-
+		databack.thumbHTML = '';
 	    if(typeof o.bossresponse.web !== 'undefined' && o.bossresponse.web.count>0){
 	      databack.web = [];
 	      databack.webHTML = '<ul>';
@@ -27,6 +48,12 @@ var _filters={};
 	        html = html.replace('{title}',item.title);
 	        html = html.replace('{abstract}',item.abstract);
 	        databack.webHTML += html;
+	        
+	        html = config.thumbTextItemHTML.replace('{clickurl}',item.clickurl);
+	        html = html.replace('{title}',item.title);
+	        html = html.replace('{abstract}',item.abstract);
+	        html = html.replace('{classe}',getClassName(o.query.name));
+	        databack.thumbHTML += html;
 	      }
 	      databack.webHTML += '</ul>';
 	      //alert(databack.webHTML);
@@ -36,7 +63,7 @@ var _filters={};
 	      databack.images = [];
 	      databack.imagesHTML = '<ul>';
 	      //databack.thumbHTML = '<ul>';
-	      databack.thumbHTML = '';
+	      
 	      for(var i=0,j=o.bossresponse.images.count;i<j;i++){
 	        var item = o.bossresponse.images.results[i];
 	        var referer = item.refererurl;
@@ -120,6 +147,7 @@ var _filters={};
         if ( databack.thumbHTML ) {
         	_queries[ o.query.name.toLowerCase() ].thumbHtmlString =databack.thumbHTML; 
         }
+  
         if ( databack.webHTML ) {
         	htmlString+=databack.webHTML; 
         }
@@ -138,7 +166,8 @@ var _filters={};
     		    newsItemHTML:'<li lang="{language}"><a href="{clickurl}">{title}</a><p>{abstract} ({source})</p></li>',
     		    imageItemHTML:'<li><a href="{url}"><img src="{thumbnail}" width="{thumbnailwidth}" height="{thumbnailheight}"></a></li>',
     		    //thumbItemHTML:'<div class="item toto {classe}"><a href="{url}" target="_blank"><img src="{thumbnail}"></a></div>'
-    		    thumbItemHTML:'<div class="item toto {classe}"><img src="{thumbnail}"  width="{thumbnailwidth}" height="{thumbnailheight}"></div>'
+    		    thumbItemHTML:'<div class="item {classe}"><img src="{thumbnail}"  width="{thumbnailwidth}" height="{thumbnailheight}"></div>',
+    		    thumbTextItemHTML:'<div class="item textBlock {classe}"><a href="{clickurl}">{title}</a><p>{abstract}</p></div>'
     		    	//imageItemHTML:'<li><a href="{url}"><img src="{thumbnail}" width="{thumbnailwidth}" height="{thumbnailheight}"></a></li>'
     		  },
    clean =  function(s) {
@@ -147,6 +176,7 @@ var _filters={};
     
     getClassName =  function(s) {
     	s =  s.replace(/[^a-zA-Z 0-9]+/g,'');
+    	s=s.split(' ').join('');
   	    return escape('query_'+s.toLowerCase());
     },
     
@@ -202,6 +232,9 @@ var _filters={};
   	          div.isotope('reLayout');
   	        });
     	}
+    	var color = getColor(query);
+    	
+    	 jQuery('.'+getClassName(query)+'.textBlock').css({"background-color":color,'color':'#ffffff'});
     	// toggle variable sizes of all elements
        //div.toggleClass('variable-sizes').isotope('reLayout');
        //div.isotope('shuffle');
@@ -373,7 +406,7 @@ var _filters={};
             container: target
           };
           target.innerHTML = "loading.. :"+options.query;
-          var APIurl = 'http://www.lesmecaniques.net/labex/yahooboss.php?q=' + clean(options.query)+"&type="+clean(options.searchtype)+"&callback=jsonp";
+          var APIurl = 'http://www.lesmecaniques.net/labex/site/yahooboss.php?q=' + clean(options.query)+"&type="+clean(options.searchtype)+"&callback=jsonp";
           if(options.enginetype=="cpv")
         	  APIurl = 'http://www.lesmecaniques.net/labex/site/cpv.php?q=' + clean(options.query)+"&type="+clean(options.searchtype)+"&callback=jsonp";
           //We don't add the same images if exusting
@@ -402,6 +435,9 @@ var _filters={};
     	  _queries[ options.query ].started = true;
     	  console.log("add filter "+getClassName(options.query));
     	  jQuery('.'+getClassName(options.query)).addClass("started");
+    	  addFilter('.'+getClassName(options.query));
+    	  console.log('filters '+_filters.join(", "))
+    	  jQuery('#div-events-thumb').isotope({ filter: _filters.join(", ")});
     	 // jQuery('.'+getClassName(options.query)).css({opacity:1});
 
     	  //jQuery('#div-events-thumb').isotope({ filter: '.query_'+options.query.toLowerCase() })
@@ -410,7 +446,7 @@ var _filters={};
         //options._container.style.display = "inline";
     	  //_filters[(getClassName(options.query)]="";
     	  
-    	 jQuery('#div-events-thumb').isotope({ filter: '.'+getClassName(options.query)});
+    	 
     	  //jQuery('#div-events-thumb').isotope("shuffle");
       },
       /**
@@ -426,6 +462,8 @@ var _filters={};
         options._container.innerHTML = "";
         jQuery('.'+getClassName(options.query)).removeClass("started");
         //jQuery('#div-events-thumb').isotope({ filter: null })
+        removeFilter('.'+getClassName(options.query));
+  	   jQuery('#div-events-thumb').isotope({ filter: _filters.join(", ")});
         
       },
       _teardown: function( options ) {

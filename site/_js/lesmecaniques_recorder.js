@@ -11,7 +11,7 @@ var EventRouter = Backbone.Router.extend( {
 
 		// Matches /117-a/b/c/open, passing "117-a/b/c" to this.open
 		// this.route(/^(.*?)\/open$/, "open");
-
+		
 	},
 
 	routes : {
@@ -55,6 +55,7 @@ var EventRouter = Backbone.Router.extend( {
 jQuery(function() {
 	window.eventRouter = new EventRouter;
 	Backbone.history.start();
+	window.eventRouter.navigate("/projects/18");
 });
 
 var EventModel = Backbone.Model.extend( {
@@ -216,8 +217,8 @@ function createPopcornEvent(event) {
 		end : parseFloat(event.get('start'))+10,//event.get('end'),
 		target : 'pierre_giner',
 		query : event.get('query'),
-		searchtype : 'images,web,news',
-		enginetype : event.get('type')
+		searchtype : 'images,web',
+		enginetype : event.get('type')?event.get('type'):'yahoboss'
 	});
 
 }
@@ -248,9 +249,13 @@ function createPopcorn(projectModel) {
 	var media = projectModel.get('Media');
 	if (media && media.type == "soundcloud") {
 		console.log('create soundcloud');
-		popcorn = Popcorn(Popcorn.soundcloud("main",
+		
+		var html = '<div id="soundcloudDiv"></div>';
+		jQuery("#main").html(html)
+		
+		popcorn = Popcorn(Popcorn.soundcloud("soundcloudDiv",
 				"http://soundcloud.com/forss/flickermood", {
-					width : "100%"
+					//width : "100%"
 				}));
 		popcorn.video.registerPopcornWithPlayer(popcorn);
 		window.eventRouter.navigate("projects/" + projectModel.id + "/events",

@@ -6,6 +6,45 @@
 <link rel="stylesheet" type="text/css" href="_css/style.css" />
 <link rel="stylesheet" type="text/css" href="_css/isotope.css" />
 <style>
+#contentwrapper{
+float: left;
+width: 100%;
+}
+#topsection{
+background: #EAEAEA;
+height: 90px; /*Height of top section*/
+}
+#topsection h1{
+margin: 0;
+padding-top: 15px;
+}
+
+#contentwrapper{
+float: left;
+width: 100%;
+}
+
+/* POPCORN MEDIA CONTAINER */
+#main {
+	width:100%;
+	margin-right:270px;
+	display:block;
+	/*height:80px;*/
+	/*position:absolute;
+	top:0; left:0*/
+}
+
+#butter-media-element-Media0 {
+	width:60px;
+	height:40px;
+	/*position:absolute;
+	top:0; left:0;*/
+	z-index:900;
+}
+#soundcloudDiv {
+	background-color:#ff0000;
+}
+
 div{
 	display:block;
 }
@@ -14,34 +53,36 @@ div{
 .content-div {
 	width: 300px;
 	height: 200px;
-	border: 1px solid #000;
+	/*border: 1px solid #000;*/
 	position:absolute;
-	top:200px;
+	top:0px;
 }
 
-#main {
+#div-events-container {
+	/*position: absolute;
+	top:90px;
+	left:0;*/
 	width:100%;
-	position:absolute;
-	top:0; left:0
+	height:500px;
+	display:block;
+	margin-right:270px;
+	/*background-color:#ffffff;*/
+	
 }
 
-#main2, #butter-media-element-Media0 {
-	width:100%;
-	height:100%;
-	position:absolute;
-	top:50px; left:0;
-	z-index:900;
-}
+
 
 #event-editor {
 	position: absolute;
 	top:120px;
-	right:20px;
+	right:10px;
 	width:250px;
 	border: 1px solid #000;
 	padding:5px 5px 5px 5px;
 	z-index:3;
 	background-color:#ffffff;
+	background-color:rgb(0,255,0);
+	
 }
 
 #event-editor .box {
@@ -55,15 +96,18 @@ div{
 	width:80%;
 }
 
-#div-events-container {
-	position: absolute;
-	top:90px;
-	left:0;
-	width:100%;
-	height:500px;
+
+
+.textBlock {
+	width:150px;
 	display:block;
-	/*background-color:#ffffff;*/
-	
+	font-size:10px;
+	padding:5px;
+	margin:5px;
+	background-color:#EFEFEF;
+}
+.textBlock a {
+	color:#111111
 }
 
 #div-events-thumb {
@@ -215,6 +259,10 @@ Popcorn(
 
 </head>
 <body>
+<div id="maincontainer">
+<div id="topsection">EXTRAORDINARIUM</div>
+
+<div id="contentwrapper">
 <div id="main" data-butter="media"></div>
 <br />
 
@@ -243,12 +291,13 @@ Popcorn(
 	<div id="div-events"  class="box"></div>
 	
 </div>
-
+</div>
 <!-- <div id="main2" data-butter="media">
 	<video controls="" id="butter-media-element-Media0" autobuffer="true" preload="auto">
 	<source src="videos/17NOVOdileNouvelVO.webm" />
-</video>
+</video></div>
 -->
+<div id="footer"><a href="#">Footer</a></div>
 
 </div>
 </body>
