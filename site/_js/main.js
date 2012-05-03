@@ -4,28 +4,30 @@ var currentEventId;
 
 
 
-function createSearchEvent(str) {
+function createSearchEvent(str,store) {
 	// alert(popcorn.currentTime());
 	if (currentEventId)
 		popcorn.getTrackEvent(currentEventId).end = popcorn.currentTime();
 	popcorn.yahooboss( {
-		start : popcorn.currentTime() + 0000001,
-		end : popcorn.currentTime() + 1000000,
+		start : popcorn.currentTime() - 5,
+		end : popcorn.currentTime() + 20,
 		target : 'pierre_giner',
 		query : str,
 		searchtype : 'images,web,news'
 	});
 	currentEventId = popcorn.getLastTrackEventId();
 	console.log("NEW EVENT " + currentEventId + " "
-			+ popcorn.getTrackEvent(currentEventId).query)
+			+ popcorn.getTrackEvent(currentEventId).query+" "+popcorn.currentTime()+" "+popcorn.getTrackEvent(currentEventId).start)
 	
 	//var e = new EventModel(popcorn.getTrackEvent(currentEventId));
+	if(store==true) {
 	var e = new EventModel({query:popcorn.getTrackEvent(currentEventId).query,start:popcorn.getTrackEvent(currentEventId).start,end:popcorn.getTrackEvent(currentEventId).end,project_id:1,user_id:1,type:'yahooboss'});
 	e.save();
+	}
 	displayAllEvents();
 }
 function createSearchEventAndDispatch(str) {
-	createSearchEvent(str);
+	createSearchEvent(str,true);
 	if(socket)
 	socket.emit('addEvent', {
 		query : popcorn.getTrackEvent(currentEventId).query,
@@ -68,7 +70,29 @@ function displayAllEvents() {
 	for ( var i=0;i<events.length;i++) {
 		var event = events[i];
 		console.log(event._natives.type,event,event.query,event.start);
-		html+='<li>'+event.query+' ('+event.start+'/'+event.end+') <a class="gototime" href="#" data-start="'+event.start+'">go</a></li>';
+		var start = parseInt(event.start);
+		if(start>20000) {
+			var d=new Date()/1000;
+			
+			start = Math.abs(d-start);
+			if (start>3600) {
+				start/=3600;
+				start = parseInt(start)+"h";
+			}
+			else if(start>60) {
+				start/=60;
+				start = parseInt(start)+"min";
+			}
+			else {
+				start = parseInt(start)+"s";
+			}
+			start="il y a "+start;
+			html+='<li>'+event.query+' ('+start+')</li>';
+		}
+		else {
+			html+='<li>'+event.query+' ('+start+') <a class="gototime" href="#" data-start="'+event.start+'">go</a></li>';
+		}
+		
 	}
 	jQuery('#'+id).html(html);
 	refreshBehaviours();

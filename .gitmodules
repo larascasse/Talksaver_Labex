@@ -16,3 +16,6 @@
 [submodule "libs_php/arc2"]
 	path = libs_php/arc2
 	url = https://github.com/semsol/arc2.git
+[submodule "site/lib/external/typewriter.js"]
+	path = site/lib/external/typewriter.js
+	url = git@github.com:larascasse/typewriter.js.git

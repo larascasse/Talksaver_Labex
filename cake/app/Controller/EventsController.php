@@ -21,6 +21,12 @@ class EventsController extends AppController {
 	}
 	
 	public function project($id_project) {
+		
+		/*
+		 * $this->Event->bindModel(array(    'hasAndBelongsToMany' => array(
+		 *         'Tag' => array('conditions'=>array('Tag.name'=>'Dessert')))));
+		 *         $this->Event->find('all');
+		 */
 		$this->Event->recursive = 0;
 		$this->Event->unbindModel(array('belongsTo' => array('User','Project')));
 		 $data = $this->Event->findAllByProjectId($id_project);
