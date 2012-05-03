@@ -263,6 +263,7 @@ div{
 <script src="lib/external/underscore-min.js"></script>
 <script src="lib/external/backbone.js"></script>
 <script src="_js/lesmecaniques_tags.js"></script>
+<script src="_js/lesmecaniques_projects.js"></script>
 <script src="_js/lesmecaniques_recorder.js"></script>
 
 
@@ -317,16 +318,38 @@ Popcorn(
 	});
 	</script>
 	
-<div id="navigation">
-<ul>
-		<li><a href="#tabs-1">Vid&eacute;o</a></li>
-		<li><a href="#tabs-2">Tags</a></li>
-		<li><a href="#tabs-3">Filtres</a></li>
+	<div id="navigation">
+	<ul>
+		<li><a href="#tabs-1">Projets</a></li>
+		<li><a href="#tabs-2">Vid&eacute;o</a></li>
+		<li><a href="#tabs-3">Tags</a></li>	
+		<li><a href="#tabs-4">Cues</a></li>
 	</ul>
+	
 	<div id="tabs-1">
+	
+	<script type="text/template" id="project-collection-template">
+        <ul>
+          <% _.each(projects, function(project) { %>
+			<li><a href="../cake/projects/edit/<%= project.id %>" target="_blank"  class="ui-icon ui-icon-pencil" style="float:left"></a> <a href="#/projects/<%= project.id %>" class="ui-button ui-button-text"><%= project.name %></a></li>
+          <% }); %>
+        </ul>
+    </script>
+	<div id="projects-block"></div>
+		<!--<ul>
+		<li><a href="#/projects/20">Hollande - Sarkozy</a></li>
+		<li><a href="#/projects/18">Odile Nouvel (audio)</a></li>
+		 <li><a href="#/projects/21">BFM Hollande Sarkozy</a></li>
+		<li><a href="#/projects/18">Odile Nouvel (audio)</a></li>
+		<li><a href="#/projects/1">Odile Nouvel (soundcloud)</a></li>
+		<li><a href="#/projects/3">Odile Nouvel (video)</a></li>		
+		</ul>-->
+	</div>	
+	
+	<div id="tabs-2">
 		<div id="main" data-butter="media"></div>
 	</div>
-	<div id="tabs-2">
+	<div id="tabs-3">
 		<script type="text/template" id="question-collection-template">
         <ul>
           <% _.each(questions, function(tag) { %>
@@ -351,13 +374,15 @@ Popcorn(
 
 <ul id="questions">
 loading ...
+</ul>
 </div>
 
 	</div>
-	<div id="tabs-3">
-		<p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
-		<p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+
+	<div id="tabs-4">
+		<div id="div-events"  class="box"></div>
 	</div>
+	
 </div>
 
 
@@ -380,23 +405,14 @@ loading ...
 	
 	
 	<div  class="box">
-		<ul>
-		<li><a href="#/projects/20">Hollande - Sarkozy</a></li>
-		<li><a href="#/projects/18">Odile Nouvel (audio)</a></li>
-		<!-- <li><a href="#/projects/21">BFM Hollande Sarkozy</a></li>
-		<li><a href="#/projects/18">Odile Nouvel (audio)</a></li>-->
-		<li><a href="#/projects/1">Odile Nouvel (soundcloud)</a></li>
-		<li><a href="#/projects/3">Odile Nouvel (video)</a></li>
 		
-		</ul>
 	</div>
 	
 	<div id="search" class="box">
 		<input type="text" id="inputsearch">
 		<input type="button" value="ok" id="inputbutton"/>
 	</div>
-	<h2>Tags</h2>
-	<div id="div-events"  class="box"></div>
+	
 	<div  class="box">
 	<h2>Partager</h2>
 		<ul>

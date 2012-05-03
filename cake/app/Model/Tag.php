@@ -35,6 +35,21 @@ class Tag extends AppModel {
 			'finderQuery' => '',
 			'deleteQuery' => '',
 			'insertQuery' => ''
+		),
+		'Project' => array(
+			'className' => 'Project',
+			'joinTable' => 'projects_tags',
+			'foreignKey' => 'tag_id',
+			'associationForeignKey' => 'project_id',
+			'unique' => 'keepExisting',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => ''
 		)
 	);
 

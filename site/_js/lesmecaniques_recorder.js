@@ -19,7 +19,19 @@ var EventRouter = Backbone.Router
 				console.log("Route initialize");
 				window.eventsCollectionModel = new EventsCollectionModel();
 				window.ProjectModel = new ProjectModel();
-
+				
+				
+				window.projectsCollectionModel = new ProjectsCollectionModel();
+				window.projectsCollectionModel.url = appUrl + '/projects/popcorn';
+				window.projectsCollectionView = new ProjectsCollectionView({ collection : window.projectsCollectionModel,el : jQuery('#projects-block') });
+				window.projectsCollectionModel.fetch( {
+					success : function(model, response) {
+						// createPopcorn(model);
+						console.log("FETCHED projectsCollectionView "+response+" "+model);
+						model.trigger("change");
+					}
+				});
+				
 				window.tagsCollectionModel = new TagsCollectionModel();
 				
 				
@@ -29,7 +41,7 @@ var EventRouter = Backbone.Router
 				window.tagsCollectionModel.fetch( {
 					success : function(model, response) {
 						// createPopcorn(model);
-						console.log("FETC tagsCollectionModel "+response+" "+model);
+						console.log("FETCHED tagsCollectionModel "+response+" "+model);
 						model.trigger("change");
 					}
 				});
@@ -65,6 +77,16 @@ var EventRouter = Backbone.Router
 				window.ProjectModel.fetch( {
 					success : function(model, response) {
 						createPopcorn(model);
+						
+						window.tagsCollectionModel.url = appUrl + '/tags/project/'+project_id;
+						window.tagsCollectionModel.fetch( {
+							success : function(model, response) {
+								// createPopcorn(model);
+								console.log("FETCHED tagsCollectionModel "+response+" "+model);
+								model.trigger("change");
+							}
+						});
+						
 					}
 				});
 			},
@@ -153,57 +175,6 @@ validate : function(attrs) {
 
 });
 
-var ProjectModel = Backbone.Model.extend( {
-
-	urlRoot : function() {
-		return appUrl + '/projects/popcorn/';
-	},
-	// cette méthode est appelée automatiquement
-	// à chaque fois que j'instancie ce type de modèle
-	initialize : function(attrs, options) {
-		console.log('New ProjectModel');
-
-		// this.fetch();
-		// J'écoute sur l'évènement 'error' au cas où si la validation a échoué
-		this.on('error', function(model, err) {
-			console.log('error' + err);
-		});
-
-	},
-	set : function(attributes, options) {
-		// map JSON obkect to ProjectModel
-	console.log(attributes);
-	if (attributes.Project) {
-		this.set(attributes.Project, options);
-		_.each(attributes.Project, function(constructor, key) {
-			attributes[key] = constructor;
-		}, this);
-		delete attributes["Project"];
-	}
-	return Backbone.Model.prototype.set.call(this, attributes, options);
-},
-save : function(attributes, options) {
-	attributes || (attributes = {});
-	attributes['Project'] = this.attributes;
-	Backbone.Model.prototype.save.call(this, attributes, options);
-},
-parse : function(response) {
-	console.log('parse PROJECT response' + response);
-	return response;
-},
-validate : function(attrs) {
-	/*
-	 * if (!/^[A-z]{2,} [A-z]{2,}$/.test(attrs.type)) return 'Nom prénom
-	 * invalide';
-	 */
-	// if (attrs.type.length !=20) return 'TYPE invalide (10 numéros).';
-	/*
-	 * if (!/^\d{10}$/.test(attrs.phone)) return 'Numéro de téléphone invalide
-	 * (chiffres).';
-	 */
-}
-
-});
 
 // window.eventsModel = new EventModel();
 
@@ -336,6 +307,10 @@ function createPopcorn(projectModel) {
 			popcorn.currentTime(new Date()/1000);
 			popcorn.listen( "timeupdate", function() {
 				jQuery('.timeupdate').html(parseInt(popcorn.currentTime()));
+			}
+			);
+			popcorn.listen( "trackstart", function() {
+				console.log("TRACK START");
 		    }
 			);
 			

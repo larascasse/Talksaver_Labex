@@ -25,16 +25,72 @@ class TagsController extends AppController {
 		//$this->Tag->unbindModel(array('belongsTo' => array('User','Project')));
 
 		/*$this->Tag->bindModel(
-				array(    'hasAndBelongsToMany' => array(
-		          'Event' => array(
-					'className' => 'Event',
-		          	'conditions'=>''
-					)
-				)
-				)
-				);*/
+		 array(    'hasAndBelongsToMany' => array(
+		 'Event' => array(
+		 'className' => 'Event',
+		 'conditions'=>''
+		 )
+		 )
+		 )
+		 );*/
 
-			
+
+		if($id_project!="") {
+			$this->Tag->unbindModel(array('hasAndBelongsToMany' => array('Project')));
+
+			/*$this->Tag->bindModel(array(
+			 'hasOne' => array(
+			 'ProjectsTag',
+			 'FiltreTag' => array(
+			 'className' => 'Project',
+			 'foreignKey' => false,
+			 'conditions' => array('FiltreTag.id = ProjectsTag.id')
+			 ))));
+			 	
+			 $data = $this->Tag->find('all', array(
+			 'fields' => array('Tag.*'),
+			 'conditions'=>array('FiltreTag.nom'=>'Dessert')
+			 ));*/
+
+
+			/*$this->Tag->bindModel(
+			 array(    'hasAndBelongsToMany' => array(
+				'Project' => array(
+
+				'conditions' => array('ProjectsTag.project_id' => $id_project),
+				'dependent' => true
+				)
+				)
+				)
+				);
+				$data = $this->Tag->find('all',array(
+				'conditions2'=>array('projects.project_id>'=>0)
+				));*/
+			$options['joins'] = array(
+			array('table' => 'projects_tags',
+				'alias' => 'ProjectsTag',
+				'type' => 'inner',
+				'conditions' => array(
+				'Tag.id = ProjectsTag.tag_id'
+			)
+			),
+			array('table' => 'projects',
+				'alias' => 'Project',
+				'type' => 'inner',
+				'conditions' => array(
+				'ProjectsTag.project_id = Project.id'
+			)
+			)
+			);
+
+			$options['conditions'] = array(
+				' Project.id' => $id_project
+			);
+
+			$data = $this->Tag->find('all', $options);
+				
+		}
+		else
 		$data = $this->Tag->find('all');
 		$this->data = $data;
 		//return new JsonResponse($data);

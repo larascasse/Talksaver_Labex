@@ -30,6 +30,9 @@ function getImageUrl(url, query) {
 function setRandomSize(div) {
 	jQuery(div).css({width:Math.floor(20+Math.random()*100),height:Math.floor(20+Math.random()*100)});
 }
+function setRandomTextSize(div) {
+	jQuery(div).css({width:Math.floor(20+Math.random()*100),height:Math.floor(20+Math.random()*100)});
+}
 
 (function(Popcorn) {
 
@@ -193,14 +196,14 @@ function setRandomSize(div) {
 				}
 			},
 			config = {
-				webItemHTML : '<li><a href="{clickurl}">{title}</a><p>{abstract}</p></li>',
-				newsItemHTML : '<li lang="{language}"><a href="{clickurl}">{title}</a><p>{abstract} ({source})</p></li>',
-				imageItemHTML : '<li><a href="{url}"><img src="{thumbnail}" width="{thumbnailwidth}" height="{thumbnailheight}"></a></li>',
+				webItemHTML : '<li><a href="{clickurl}" target="_blank">{title}</a><p>{abstract}</p></li>',
+				newsItemHTML : '<li lang="{language}"><a href="{clickurl}"  target="_blank">{title}</a><p>{abstract} ({source})</p></li>',
+				imageItemHTML : '<li><a href="{url}"  target="_blank"><img src="{thumbnail}" width="{thumbnailwidth}" height="{thumbnailheight}"></a></li>',
 				// thumbItemHTML:'<div class="item toto {classe}"><a
 				// href="{url}" target="_blank"><img
 				// src="{thumbnail}"></a></div>'
 				thumbItemHTML : '<div class="item {classe}"><img src="{thumbnail}"  width="{thumbnailwidth}" height="{thumbnailheight}"></div>',
-				thumbTextItemHTML : '<div class="item textBlock {classe}"><a href="{clickurl}">{title}</a><p>{abstract}</p></div>'
+				thumbTextItemHTML : '<div class="item textBlock {classe}"><a href="{clickurl}"  target="_blank">{title}</a><p>{abstract}</p></div>'
 			// imageItemHTML:'<li><a href="{url}"><img src="{thumbnail}"
 			// width="{thumbnailwidth}" height="{thumbnailheight}"></a></li>'
 			}, clean = function(s) {
@@ -253,25 +256,50 @@ function setRandomSize(div) {
 
 				} else {
 					console.log("update isotop");
-					div.isotope('insert', $newItems);
-					div.isotope('reLayout');
+					try {
+						div.isotope('insert', $newItems);
+						div.isotope('reLayout');
+						}
+						catch(err) {
+						}
+						
+					
 
 				}
 				div.imagesLoaded(function() {
-					console.log("IMAGES LOADED")
+					console.log("IMAGES LOADED");
+					try {
 					div.isotope('reLayout');
+					}
+					catch(err) {
+					}
 				});
 				// change size of clicked element
 				div.delegate('.item', 'click', function() {
 					jQuery(this).toggleClass('large');
-					div.isotope('reLayout');
+					try {
+						div.isotope('reLayout');
+						}
+						catch(err) {
+						}
 				});
 
 				// assign random color on textblock
 				var color = getColor(query);
+				var textSize = Math.floor(8+Math.random()*15);
+				var textWidth = textSize*20;
 				jQuery('.' + getClassName(query) + '.textBlock').css( {
 					"background-color" : color,
-					'color' : '#ffffff'
+					'color' : '#ffffff',
+					'font-size' : textSize,
+					'width' : textWidth
+				});
+				jQuery('.' + getClassName(query) + '.textBlock a').css( {
+					'color' : '#ffffff',
+					'font-size' : textSize+5
+				});
+				jQuery('.' + getClassName(query) + '.textBlock  b').css( {
+					'font-size' : textSize+10
 				});
 
 			}, showAsFullscreen = function(container, query) {

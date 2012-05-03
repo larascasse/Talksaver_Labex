@@ -19,3 +19,6 @@
 [submodule "site/lib/external/typewriter.js"]
 	path = site/lib/external/typewriter.js
 	url = git@github.com:larascasse/typewriter.js.git
+[submodule "site/lib/external/reveal.js"]
+	path = site/lib/external/reveal.js
+	url = git@github.com:larascasse/reveal.js.git

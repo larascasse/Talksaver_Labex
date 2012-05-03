@@ -45,8 +45,10 @@ class ProjectsController extends AppController {
 		$this->Project->recursive = 0;
 		
 		$this->Project->unbindModel(array('belongsTo' => array('User')));
-		
-		$data = $this->Project->findById($this->Project->id);
+		if($this->Project->id>0)
+			$data = $this->Project->findById($this->Project->id);
+		else
+			$data = $this->Project->find('all');
 		$this->data = $data;
 		//return new JsonResponse($data);
 		$this->set(compact('data'));
