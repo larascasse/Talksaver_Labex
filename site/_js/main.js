@@ -1,11 +1,18 @@
 var currentEventId;
 
+function getClassName (s) {
+	s = s.replace(/[^a-zA-Z 0-9]+/g, '');
+	s = s.split(' ').join('');
+	return escape('query_' + s.toLowerCase());
+}
 
 
 
 
 function createSearchEvent(str,store) {
-	// alert(popcorn.currentTime());
+	console.log("createSearchEvent");
+	console.log(popcorn);
+	console.log(popcorn.yahooboss);
 	if (currentEventId)
 		popcorn.getTrackEvent(currentEventId).end = popcorn.currentTime();
 	popcorn.yahooboss( {
@@ -90,7 +97,16 @@ function displayAllEvents() {
 			html+='<li>'+event.query+' ('+start+')</li>';
 		}
 		else {
-			html+='<li>'+event.query+' ('+start+') <a class="gototime" href="#" data-start="'+event.start+'">go</a></li>';
+			var eventModel = event.eventModel;
+			
+			html+='<li style="clear:both" class="'+getClassName(event.query)+'">';
+			html+='<p style="float:left" >'+event.query+' ('+start+')</p> ';
+			html+='<a class="gototime ui-icon ui-icon-play" style="float:left" href="#" data-start="'+event.start+'">go</a> ';
+			if(eventModel && eventModel.id && eventModel.id>0) {
+				html+='<a href="../cake/events/edit/'+eventModel.id+'" target="_blank"  style="float:left"  class="ui-icon ui-icon-pencil"></a> ';
+			}
+			html+='<a href="#" target="_blank"  style="float:left"  class="ui-icon ui-icon-trash"></a>';
+			html+='</li>';
 		}
 		
 	}

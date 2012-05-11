@@ -187,8 +187,7 @@ function setRandomTextSize(div) {
 				}
 				_queries[o.query.name.toLowerCase()].htmlString = htmlString;
 
-				console
-						.log('started' + _queries[o.query.name.toLowerCase()].started);
+				console.log('started' + _queries[o.query.name.toLowerCase()].started);
 				if (_queries[o.query.name.toLowerCase()].started) {
 					startContainer(
 							_queries[o.query.name.toLowerCase()].container,
@@ -206,16 +205,22 @@ function setRandomTextSize(div) {
 				thumbTextItemHTML : '<div class="item textBlock {classe}"><a href="{clickurl}"  target="_blank">{title}</a><p>{abstract}</p></div>'
 			// imageItemHTML:'<li><a href="{url}"><img src="{thumbnail}"
 			// width="{thumbnailwidth}" height="{thumbnailheight}"></a></li>'
-			}, clean = function(s) {
+			}, 
+			clean = function(s) {
 				return encodeURIComponent(s);
 			},
 
-			getClassName = function(s) {
-				s = s.replace(/[^a-zA-Z 0-9]+/g, '');
-				s = s.split(' ').join('');
-				return escape('query_' + s.toLowerCase());
-			},
+			startContainer = function(container, query) {
+				console.log('startContainer');
+				container.style.display = "none";
+				showAsThumb(query);
+				jQuery('#div-events-thumb').isotope("shuffle");
+				createContainer('image-container');
+				// console.log('startContainer'+container+jQuery('#image-container'));
+				container.innerHTML = _queries[query].htmlString;
 
+			} 
+			,
 			createContainer = function(id) {
 				/***************************************************************
 				 * CREATE CONTAINER
@@ -262,9 +267,6 @@ function setRandomTextSize(div) {
 						}
 						catch(err) {
 						}
-						
-					
-
 				}
 				div.imagesLoaded(function() {
 					console.log("IMAGES LOADED");
@@ -302,7 +304,8 @@ function setRandomTextSize(div) {
 					'font-size' : textSize+10
 				});
 
-			}, showAsFullscreen = function(container, query) {
+			}, 
+			showAsFullscreen = function(container, query) {
 				container.style.display = "none";
 				// nosign(_queries[query].start,_queries[query].end,query);
 				// ou en passant les options :
@@ -358,28 +361,9 @@ function setRandomTextSize(div) {
 					// delay pour le random
 					delay : 2000
 				});
-			},
-
-			startContainer = function(container, query) {
-				console.log('startContainer');
-				container.style.display = "none";
-				showAsThumb(query);
-				jQuery('#div-events-thumb').isotope("shuffle");
-				createContainer('image-container');
-				// console.log('startContainer'+container+jQuery('#image-container'));
-				container.innerHTML = _queries[query].htmlString;
-
 			};
 	// logger.log("TOTO");
 	/**
-	 * Labex popcorn plug-in Appends information about a Labex artist to an
-	 * element on the page. Options parameter will need a start, end, target,
-	 * artist and apikey. Start is the time that you want this plug-in to
-	 * execute End is the time that you want this plug-in to stop executing
-	 * Artist is the name of who's Labex information you wish to show Target is
-	 * the id of the document element that the images are appended to, this
-	 * target element must exist on the DOM ApiKey is the API key registered
-	 * with Labex for use with their API
 	 * 
 	 * @param {Object}
 	 *            options
@@ -428,6 +412,9 @@ function setRandomTextSize(div) {
 									elem : "input",
 									type : "text",
 									label : "Engine : yahooboss ou cpv"
+								},
+								eventModel : {
+									
 								}
 							}
 						},
@@ -437,6 +424,7 @@ function setRandomTextSize(div) {
 							options._container = document.createElement("div");
 							options._container.setAttribute("id",
 									'#webservice-return' + options.query);
+							options.eventModel = options.eventModel;
 							options._container.style.display = "none";
 							options._container.innerHTML = "";
 							options.query = options.query

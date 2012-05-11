@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+<meta property="og:title" content="les mecaniques" />
+<meta property="og:type" content="activity" />
+<meta property="og:url" content="http://www.lesmecaniques.net/labex/site" />
+<meta property="og:image" content="" />
+<meta property="og:site_name" content="Extraordinarium" />
+<meta property="fb:admins" content="650634033" />
+
+<script>
+/*
+ * var re = new RegExp('#(.*)');
+ var redirectFragment = re.exec(document.location.toString());
+ if (redirectFragment!=null)
+ {
+     document.location = 'http://new.html-site.com'+redirectFragment[1];
+ }
+ //RewriteRule ^some/path/here.html$ /some/url/with/hash/here/#blah [R=301,L,NE]
+ */
+</script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.20/themes/base/jquery-ui.css" type="text/css" media="all" />
+<link rel="stylesheet" href="_css/custom-theme/jquery-ui-1.8.20.custom.css" type="text/css" media="all" />
+<link rel="stylesheet" type="text/css" href="_css/style.css" />
+
+<!--  JQUERY  -->
+<script src="http://code.jquery.com/jquery-1.5.js"></script>
+<script src="lib/external/jquery.json-2.3.min.js"></script>
+<script	src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js"></script>
+<script src="lib/external/modernizr-2.0.6.min.js"></script>
+
+
+
+
+
+
+<script src="../butter/external/popcorn-js/popcorn.js"></script>
+<script src="../butter/external/popcorn-js/modules/player/popcorn.player.js"></script>
+<script src="lib/external/typewriter.js/typewriter.js"></script>
+<script src="lib/external/jQuery.typewriter.js"></script>
+<!--  LABEX  -->	
+<script src="_js/popcorn/popcorn.typewriter.js"></script>
+
+<script>
+	jQuery(function() {
+		//alert();
+		var str= jQuery("#textwriter").html();
+		//alert(str);
+		
+		var options = {
+			start: 0,
+			left: 0,
+			top: 100,
+			space: 10,
+			shadow: true,
+			shadowX: 0,
+			shadowY: 0,
+			textColor: 'rgba(0,0,0,1.0)',
+			font: '20px Ubuntu Mono, monospace',
+			callback: function(){}
+		};
+		
+		//var typeWriter=new TypeWriter("textwriter",options);
+		//typeWriter.type(str);
+		var options =  {
+				speed: 200,//delay between imaginary keystrokes (in milliseconds)
+				typeIn: 'words',//letters,words,phrases,custom
+				customChar: [''],//only for typeIn == custom, provide an array of custom characters to break the "typing" or "erasing" at
+				outputFormat: 'HTML',//['HTML','plaintext']
+				typeInHTML: false,//true: type in the HTML tag (char by char), false: type in the HTML tag all at once
+				typeInASCII: false,//true: type in the ASCII (char by char), false: type in the ASCII all at once
+				onComplete: function(){},//a function when the effect completes,//a function when the effect completes
+				onFire: function(word){console.log("word +"+word)},//a function when the effect fire
+				text : jQuery("#textwriter2").html()
+			}
+		/*jQuery("#textwriter2").jTypeWriterMecanique("init",options);
+		jQuery("#textwriter2").jTypeWriterMecanique("play");
+		console.log(jQuery("#textwriter2").jTypeWriterMecanique("getDuration"));
+		console.log(jQuery("#textwriter2").jTypeWriterMecanique("getDuration"));*/
+	});
+
+
+	document.addEventListener('DOMContentLoaded', function(e) {
+		var popcorn = Popcorn.typewriter( "footer", {
+				speed: 200,//delay between imaginary keystrokes (in milliseconds)
+  				typeIn: 'words',//letters,words,phrases,custom
+  				customChar: [''],//only for typeIn == custom, provide an array of custom characters to break the "typing" or "erasing" at
+  				outputFormat: 'HTML',//['HTML','plaintext']
+  				typeInHTML: false,//true: type in the HTML tag (char by char), false: type in the HTML tag all at once
+  				typeInASCII: false,//true: type in the ASCII (char by char), false: type in the ASCII all at once
+   				text : jQuery("#textwriter2").html()
+  			})
+		popcorn.play(0);
+
+	}, false);
+	
+	</script>
+</head>
+<body>
+<div id="maincontainer">
+
+<div id="contentwrapper">
+<div id="textwriter2" width="800" height="200"><b>Grande-Bretagne: «l'Europe face à ses tourments»</b><br />
+«Au revoir austerity!» À Londres, le Daily Mail, 
+comme le Times, analyse le vote des Français comme «une révolte contre l'austérité». Le Times estime, en parallèle avec le résultat des élections grecques, qu' «un profond changement politique est en marche en Europe» pour punir les gouvernements ayant mis en place l'austérité. Pour le Daily Telegraph, conservateur, «la lune de miel est finie avant même de commencer dans un pays qui fait face à la faillite». Le Guardian, de gauche, salue «le changement dont la France a besoin» mais souligne l'étroitesse de la marge de manœuvre du nouveau président: soit Hollande réussit à relancer la faible croissance et à créer des emplois, «soit l'extrême droite aura un boulevard pour faire des immigrés et du gouvernement des boucs émissaires».
+
+David Cameron a appelé François Hollande dimanche soir pour le féliciter. Mais plusieurs journaux anglais soulignent qu'il avait misé sur le mauvais cheval. Le Daily Mail se demande s'il va payer pour «avoir snobé le gagnant», qu'il avait refusé de recevoir à Londres en février. Juste avant le second tour, un ministre de son gouvernement, Ian Duncan Smith, avait prévenu que de nombreux Français allaient fuir la politique fiscale du président socialiste pour venir trouver refuge à Londres.
+</div>
+
+<canvas id="textwriter" width="800" height="200">
+Grande-Bretagne: «l'Europe face à ses tourments»
+«Au revoir austerity!» À Londres, le Daily Mail, 
+comme le Times, analyse le vote des Français comme «une révolte contre l'austérité». Le Times estime, en parallèle avec le résultat des élections grecques, qu' «un profond changement politique est en marche en Europe» pour punir les gouvernements ayant mis en place l'austérité. Pour le Daily Telegraph, conservateur, «la lune de miel est finie avant même de commencer dans un pays qui fait face à la faillite». Le Guardian, de gauche, salue «le changement dont la France a besoin» mais souligne l'étroitesse de la marge de manœuvre du nouveau président: soit Hollande réussit à relancer la faible croissance et à créer des emplois, «soit l'extrême droite aura un boulevard pour faire des immigrés et du gouvernement des boucs émissaires».
+
+David Cameron a appelé François Hollande dimanche soir pour le féliciter. Mais plusieurs journaux anglais soulignent qu'il avait misé sur le mauvais cheval. Le Daily Mail se demande s'il va payer pour «avoir snobé le gagnant», qu'il avait refusé de recevoir à Londres en février. Juste avant le second tour, un ministre de son gouvernement, Ian Duncan Smith, avait prévenu que de nombreux Français allaient fuir la politique fiscale du président socialiste pour venir trouver refuge à Londres.
+</canvas>
+
+<div id="footer"><a href="#"><br /><br />FOOTER<br /></a></div>
+</div>
+</div>
+</body>
+</html>
+<!-- 
+{"template":"labex","title":"Test 1","guid":"05571AD9-B1E5-4324-93DC-C3CADD73AD75","project":{"targets":[{"id":0,"name":"pierre_giner"},{"id":1,"name":"patrick_bouchain"}],"media":[{"id":"Media0","name":"Media01328091334465","url":"http://localhost:3000/videos/17NOVOdileNouvelVO.webm","target":"main","duration":421.2909851074219,"tracks":[{"name":"Track1328091341780","id":"Track0","trackEvents":[{"id":"TrackEvent0","type":"yahooboss","popcornOptions":{"start":15.427888927924926,"end":43.97866868926258,"query":"architecture bouchain","searchtype":"","target":"pierre_giner"},"track":"Track1328091341780","name":"Track1328091341788"}]},{"name":"Track1328091439716","id":"Track1","trackEvents":[{"id":"TrackEvent1","type":"footnote","popcornOptions":{"start":10.56351464248285,"end":34.11429440382051,"target":"patrick_bouchain","text":"Bonjour à tous"},"track":"Track1328091439716","name":"Track1328091439724"}]}]}]},"timeStamp":1328091522131} -->

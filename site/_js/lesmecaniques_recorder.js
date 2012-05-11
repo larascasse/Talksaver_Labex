@@ -4,12 +4,12 @@ Backbone.emulateHTTP = true;
 jQuery(function() {
 	window.eventRouter = new EventRouter;
 	Backbone.history.start();
-	window.eventRouter.navigate("/projects/20", {
-		trigger : true
-	});
-	/*window.eventRouter.navigate("/", {
+	/*window.eventRouter.navigate("/projects/20", {
 		trigger : true
 	});*/
+	window.eventRouter.navigate("/", {
+		trigger : true
+	});
 });
 
 var appUrl = '/labex/cake';
@@ -17,10 +17,13 @@ var EventRouter = Backbone.Router
 		.extend( {
 			initialize : function(options) {
 				console.log("Route initialize");
+				//Event Collection
 				window.eventsCollectionModel = new EventsCollectionModel();
+				
+				//Current Project Model
 				window.ProjectModel = new ProjectModel();
 				
-				
+				//Projects Collections
 				window.projectsCollectionModel = new ProjectsCollectionModel();
 				window.projectsCollectionModel.url = appUrl + '/projects/popcorn';
 				window.projectsCollectionView = new ProjectsCollectionView({ collection : window.projectsCollectionModel,el : jQuery('#projects-block') });
@@ -32,9 +35,8 @@ var EventRouter = Backbone.Router
 					}
 				});
 				
+				//Tags Collections
 				window.tagsCollectionModel = new TagsCollectionModel();
-				
-				
 				window.questionsCollectionView = new QuestionsCollectionView({ collection : window.tagsCollectionModel,el : jQuery('#questions-block') });
 				
 				window.tagsCollectionModel.url = appUrl + '/tags/project';
@@ -71,13 +73,16 @@ var EventRouter = Backbone.Router
 			},
 
 			projects : function(project_id) {
-
+				if($tabs)
+					$tabs.tabs('select', 1); // switch to third tab
 				window.ProjectModel.url = appUrl + '/projects/popcorn/'
 						+ project_id;
 				window.ProjectModel.fetch( {
 					success : function(model, response) {
+						//Create Popcorn on success
 						createPopcorn(model);
 						
+						//Refresh tags colection for the new loaded project
 						window.tagsCollectionModel.url = appUrl + '/tags/project/'+project_id;
 						window.tagsCollectionModel.fetch( {
 							success : function(model, response) {
@@ -86,18 +91,17 @@ var EventRouter = Backbone.Router
 								model.trigger("change");
 							}
 						});
-						
 					}
 				});
 			},
 
 			events : function(project_id) {
 				// prevent for loading event from another projetc
+				console.log("fetch eventsCollectionModel")
 			if (project_id != window.ProjectModel.get("id")) {
 				this.projects(project_id);
 				return;
 			}
-			console.log("Route -> events");
 			window.eventsCollectionModel.reset();
 			window.eventsCollectionModel.url = appUrl + '/events/project/'
 					+ project_id;
@@ -110,119 +114,10 @@ var EventRouter = Backbone.Router
 
 		});
 
-var EventModel = Backbone.Model.extend( {
-
-	urlRoot : function() {
-		return appUrl + '/events/popcorn/';
-	},
-	// cette mŽthode est appelŽe automatiquement
-	// ˆ chaque fois que j'instancie ce type de modle
-	initialize : function(attrs, options) {
-		console.log('New EventModel');
-
-		// this.fetch();
-		// J'Žcoute sur l'Žvnement 'error' au cas o si la validation a ŽchouŽ
-		this.on('error', function(model, err) {
-			console.log('error' + err);
-		});
-		// J'Žcoute aussi sur l'Žvnement change pour savoir si a c'est bien
-		// passŽ
-		this.on('change', function(model) {
-			console.log('EventModel Change' + model);
-		});
-		this.on('success', function(model) {
-			console.log("EventModel success");
-		});
-		this.on('add', function(model) {
-			console.log("EventModel add");
-		});
-
-	},
-	set : function(attributes, options) {
-		// map JSON obkect to EventModel
-	if (attributes.Event) {
-		this.set(attributes.Event, options);
-		_.each(attributes.Event, function(constructor, key) {
-			attributes[key] = constructor;
-		}, this);
-		delete attributes["Event"];
-	}
-	return Backbone.Model.prototype.set.call(this, attributes, options);
-},
-save : function(attributes, options) {
-	attributes || (attributes = {});
-	if (this.attributes["end"] == 0)
-		this.attributes["end"] = 10000;
-	this.attributes["project_id"] = window.ProjectModel.id;
-	attributes['Event'] = this.attributes;
-	Backbone.Model.prototype.save.call(this, attributes, options);
-},
-parse : function(response) {
-	console.log('parse EVENT response' + response);
-	return response.Event;
-},
-validate : function(attrs) {
-	/*
-	 * if (!/^[A-z]{2,} [A-z]{2,}$/.test(attrs.type)) return 'Nom prŽnom
-	 * invalide';
-	 */
-	// if (attrs.type.length !=20) return 'TYPE invalide (10 numŽros).';
-	/*
-	 * if (!/^\d{10}$/.test(attrs.phone)) return 'NumŽro de tŽlŽphone invalide
-	 * (chiffres).';
-	 */
-}
-
-});
-
-
-// window.eventsModel = new EventModel();
-
-var EventsCollectionModel = Backbone.Collection.extend( {
-	model : EventModel,
-	parse : function(response) {
-		console.log('parse response' + response);
-		return response;
-	},
-	// cette mŽthode est appelŽe automatiquement
-	// ˆ chaque fois que j'instancie ce type de modle
-	initialize : function(attrs, options) {
-		console.log('New EventsCollectionModel');
-
-		this.bind('all', function(action, model) {
-			console.log('ModelCollection->' + action + '()', model);
-			if (popcorn) {
-				clearAllPopcornEvents();
-				this.each(function(event) {
-					createPopcornEvent(event);
-				});
-				displayAllEvents();
-			}
-		});
-	},
-
-	log : function(model) {
-		console.log("llllllllll" + model)
-	}
-
-});
-
 function testLog(model) {
 	console.log("llllllllll" + model)
 }
 
-function createPopcornEvent(event) {
-	// console.log('createPopcornEvent' + event.get('start'));
-	popcorn.yahooboss( {
-		start : event.get('start'),
-		end : parseFloat(event.get('start')) + 120,// event.get('end'),
-		target : 'pierre_giner',
-		query : event.get('query'),
-		searchtype : 'images,web',
-		enginetype : event.get('type') ? event.get('type') : 'yahoboss'
-	});
-
-}
 
 function clearAllPopcornEvents() {
 	console
@@ -254,7 +149,24 @@ function createPopcorn(projectModel) {
 		jQuery("#main").html('');
 	}
 	var media = projectModel.get('Media');
-	if (media && media.type == "soundcloud") {
+	
+	if (media && media.type == "text") {
+		console.log('create Text');
+		
+		var html = '<div id="textDiv"></div>';
+		jQuery("#main").html(html)
+		popcorn = Popcorn.typewriter( "textDiv", {
+			speed: 200,//delay between imaginary keystrokes (in milliseconds)
+				typeIn: 'words',//letters,words,phrases,custom
+				customChar: [''],//only for typeIn == custom, provide an array of custom characters to break the "typing" or "erasing" at
+				outputFormat: 'HTML',//['HTML','plaintext']
+				typeInHTML: false,//true: type in the HTML tag (char by char), false: type in the HTML tag all at once
+				typeInASCII: false,//true: type in the ASCII (char by char), false: type in the ASCII all at once
+				text : media.text
+			});
+		popcorn.play();
+	} 
+	else if (media && media.type == "soundcloud") {
 		console.log('create soundcloud');
 
 		var html = '<div id="soundcloudDiv"></div>';
@@ -323,12 +235,14 @@ function createPopcorn(projectModel) {
 		
 	    
 		popcorn.play();
+		$tabs.tabs('select', 1); // switch to third tab
 		/*
 		 * window.eventRouter.navigate("projects/" + projectModel.id +
 		 * "/events", { trigger : true, replace: true });
 		 */
 
 	}
+	console.log("EN CREATING POPCORN popcor ?"+popcorn+" "+$tabs)
 	window.eventRouter.events(projectModel.id);
 }
 

@@ -7,7 +7,7 @@ var ProjectModel = Backbone.Model.extend( {
 	// cette mŽthode est appelŽe automatiquement
 	// ˆ chaque fois que j'instancie ce type de modle
 	initialize : function(attrs, options) {
-		console.log('New ProjectModel');
+		//console.log('New ProjectModel');
 
 		// this.fetch();
 		// J'Žcoute sur l'Žvnement 'error' au cas o si la validation a ŽchouŽ
@@ -17,8 +17,7 @@ var ProjectModel = Backbone.Model.extend( {
 
 	},
 	set : function(attributes, options) {
-		// map JSON obkect to ProjectModel
-	console.log(attributes);
+	
 	if (attributes.Project) {
 		this.set(attributes.Project, options);
 		_.each(attributes.Project, function(constructor, key) {
@@ -34,7 +33,7 @@ save : function(attributes, options) {
 	Backbone.Model.prototype.save.call(this, attributes, options);
 },
 parse : function(response) {
-	console.log('parse PROJECT response' + response);
+	//console.log('parse PROJECT response' + response);
 	return response;
 },
 validate : function(attrs) {
@@ -59,25 +58,25 @@ var ProjectsCollectionModel = Backbone.Collection.extend( {
 		console.log('New ProjectsCollectionModel');
 
 		this.bind('all', function(action, model) {
-			console.log('ProjectsCollectionModel->' + action + '()', model);
+			//console.log('ProjectsCollectionModel->' + action + '()', model);
 
 		});
 	},
 
 	parse : function(response) {
-		console.log('parse PROJECTS COLLECTION response' + response);
+		//console.log('parse PROJECTS COLLECTION response' + response);
 		
 		/*_.each(response, function(constructor, key) {
 			response[key].Tag.events = constructor.Event;
 			delete constructor.Event;
 		}, this);*/
-		console.log(response);
+		//console.log(response);
 		return response;
 
 	},
 	set : function(attributes, options) {
 		// map JSON obkect to EventModel
-		console.log('SET PROJECTS COLLECTION response' + response);
+		//console.log('SET PROJECTS COLLECTION response' + response);
 		if (attributes.Event) {
 			this.set(attributes.Event, options);
 			_.each(attributes.Event, function(constructor, key) {
@@ -94,7 +93,7 @@ var ProjectsCollectionView = Backbone.View.extend( {
 	// el : jQuery('#questions-block'),
 
 	initialize : function() {
-		console.log("initialize ProjectsCollectionView " + this.collection);
+		//console.log("initialize ProjectsCollectionView " + this.collection);
 		this.template = _.template($('#project-collection-template').html());
 
 		/*--- binding ---*/

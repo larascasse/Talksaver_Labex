@@ -155,6 +155,10 @@ div{
 	padding:5px;
 }
 
+li.started {
+	background-color:#FF0000;
+}
+
 .started img {
 	/*opacity : 1;*/
 	opacity:1.0 !important;filter:alpha(opacity=100) !important;
@@ -252,6 +256,8 @@ div{
 <script src="../butter/external/popcorn-js/modules/player/popcorn.player.js"></script>
 <script src="../butter/external/popcorn-js/players/soundcloud/popcorn.soundcloud.js"></script>
 
+
+
 <script src="../butter/external/popcorn-js/plugins/footnote/popcorn.footnote.js"></script>
 
 
@@ -262,6 +268,7 @@ div{
 <!--  MODEL  -->
 <script src="lib/external/underscore-min.js"></script>
 <script src="lib/external/backbone.js"></script>
+<script src="_js/lesmecaniques_events.js"></script>
 <script src="_js/lesmecaniques_tags.js"></script>
 <script src="_js/lesmecaniques_projects.js"></script>
 <script src="_js/lesmecaniques_recorder.js"></script>
@@ -269,6 +276,10 @@ div{
 
 <!--  LABEX  -->	
 <script src="_js/popcorn/popcorn.labex.js"></script>
+<script src="lib/external/jQuery.typewriter.js"></script>
+<script src="_js/popcorn/popcorn.typewriter.js"></script>
+
+
 <!-- gestion des Žcrans/calques -->
 <script type="text/javascript" src="_js/nosign.view.js"></script>
 <!-- lanceur -->
@@ -310,8 +321,9 @@ Popcorn(
 
 
 	<script>
+	var $tabs;
 	jQuery(function() {
-		$( "#navigation" ).tabs({
+		$tabs=$( "#navigation" ).tabs({
 			collapsible: true
 		});
 		
@@ -380,7 +392,7 @@ loading ...
 	</div>
 
 	<div id="tabs-4">
-		<div id="div-events"  class="box"></div>
+		<div id="div-events__"  class="box"></div>
 	</div>
 	
 </div>
@@ -412,6 +424,8 @@ loading ...
 		<input type="text" id="inputsearch">
 		<input type="button" value="ok" id="inputbutton"/>
 	</div>
+	
+	<div id="div-events"  class="box"></div>
 	
 	<div  class="box">
 	<h2>Partager</h2>

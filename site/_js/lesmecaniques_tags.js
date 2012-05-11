@@ -6,7 +6,7 @@ var TagModel = Backbone.Model.extend( {
 	// cette méthode est appelée automatiquement
 	// à chaque fois que j'instancie ce type de modèle
 	initialize : function(attrs, options) {
-		console.log('New TagModel');
+		//console.log('New TagModel');
 
 		// this.fetch();
 		// J'écoute sur l'évènement 'error' au cas où si la validation a échoué
@@ -28,10 +28,10 @@ var TagModel = Backbone.Model.extend( {
 	},
 	set : function(attributes, options) {
 		// map JSON obkect to TagModel
-		console.log("SET TAG !!!" + attributes + options);
-	console.log(attributes);
+		//console.log("SET TAG !!!" + attributes + options);
+	//console.log(attributes);
 	if (attributes.Event) {
-		console.log("SET TAG=> EVENT" + attributes + options)
+		//console.log("SET TAG=> EVENT" + attributes + options)
 		this.set(attributes.Event, options);
 		_.each(attributes.Tag, function(constructor, key) {
 			attributes[key] = constructor;
@@ -51,7 +51,7 @@ parse : function(response) {
 var TagsCollectionModel = Backbone.Collection.extend( {
 	model : TagModel,
 	parse : function(response) {
-		console.log('parse TagsCollectionModel response' + response);
+		//console.log('parse TagsCollectionModel response' + response);
 		return response;
 	},
 	// cette méthode est appelée automatiquement
