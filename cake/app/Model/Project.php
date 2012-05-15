@@ -13,6 +13,7 @@ class Project extends AppModel {
  */
 	public $displayField = 'name';
 	var $belongsTo = 'User,Media'; 
+	public $actsAs = array('Containable');
 /**
  * Validation rules
  *
